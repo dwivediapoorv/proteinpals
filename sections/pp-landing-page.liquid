@@ -246,7 +246,7 @@
       </div>
 
       {%- comment %} Shared form for both tabs — hidden fields toggled by JS {%- endcomment %}
-      {%- form 'contact', id: 'pp-calc-form-' | append: section.id, class: 'pp-lp__calc-form' -%}
+      {%- form 'contact', class: 'pp-lp__calc-form' -%}
         <input type="hidden" name="contact[calculator_type]" id="pp-calc-type-{{ section.id }}" value="BMI">
         <input type="hidden" name="contact[tags]" value="bmi-bmr-lead">
 
@@ -619,7 +619,7 @@
     </div>
 
     <div class="pp-lp__multistep-wrap">
-      {%- form 'contact', id: 'pp-primary-form-' | append: section.id, class: 'pp-lp__multistep-form' -%}
+      {%- form 'contact', class: 'pp-lp__multistep-form' -%}
         <input type="hidden" name="contact[tags]" value="high-intent-lead">
 
         {%- comment %} Step progress indicator {%- endcomment %}
@@ -921,7 +921,7 @@
   }
 
   // ── Calculator local computation + results reveal ─────────────────────────
-  var calcForm = document.getElementById('pp-calc-form-{{ section.id }}');
+  var calcForm = document.querySelector('#pp-calculator-{{ section.id }} .pp-lp__calc-form');
   var calcResults = document.getElementById('pp-calc-results-{{ section.id }}');
   if (calcForm && calcResults) {
     calcForm.addEventListener('submit', function(e) {
@@ -977,7 +977,7 @@
   });
 
   // ── Multi-step primary form ───────────────────────────────────────────────
-  var formSteps = document.querySelectorAll('#pp-primary-form-{{ section.id }} .pp-lp__form-step');
+  var formSteps = document.querySelectorAll('#pp-form-{{ section.id }} .pp-lp__form-step');
   var stepDots = document.querySelectorAll('#pp-form-{{ section.id }} .pp-lp__step-dot');
   var progressBar = document.querySelector('#pp-form-{{ section.id }} .pp-lp__step-indicator');
   var stickyCTA = document.getElementById('pp-sticky-cta-{{ section.id }}');
@@ -1000,7 +1000,7 @@
     }
   }
 
-  document.querySelectorAll('#pp-primary-form-{{ section.id }} .pp-lp__next-btn').forEach(function(btn) {
+  document.querySelectorAll('#pp-form-{{ section.id }} .pp-lp__next-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
       var currentStep = parseInt(btn.closest('.pp-lp__form-step').getAttribute('data-step'));
       var currentFields = btn.closest('.pp-lp__form-step').querySelectorAll('[required]');
@@ -1014,7 +1014,7 @@
     });
   });
 
-  document.querySelectorAll('#pp-primary-form-{{ section.id }} .pp-lp__back-btn').forEach(function(btn) {
+  document.querySelectorAll('#pp-form-{{ section.id }} .pp-lp__back-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
       var backTo = parseInt(btn.getAttribute('data-back'));
       showStep(backTo);
