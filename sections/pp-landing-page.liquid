@@ -1,0 +1,1414 @@
+{{ 'pp-landing-page.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign st = section.settings
+  assign animation_effect = settings.animations
+  assign animated = false
+  if animation_effect != 'none'
+    assign animated = true
+    if st.animations != 'inherit'
+      assign animation_effect = st.animations
+    endif
+  endif
+-%}
+
+{%- comment -%} ============================================================
+  MINIMAL NAV (shown when header setting = minimal)
+============================================================ {%- endcomment -%}
+{% if st.header_style == 'minimal' %}
+<nav class="pp-lp__nav" id="pp-lp-nav" aria-label="Landing page navigation">
+  <div class="pp-lp__nav-inner">
+    <a href="{{ shop.url }}" class="pp-lp__nav-logo" aria-label="{{ shop.name }}">
+      {% if st.nav_logo != blank %}
+        <img src="{{ st.nav_logo | image_url: width: 200 }}" alt="{{ shop.name }}" width="140" height="40" loading="eager">
+      {% else %}
+        <span class="pp-lp__nav-logo-text">{{ shop.name }}</span>
+      {% endif %}
+    </a>
+    <ul class="pp-lp__nav-links">
+      <li><a href="#pp-how-it-works-{{ section.id }}">{{ st.nav_link1_label | default: 'How It Works' }}</a></li>
+      <li><a href="#pp-plans-{{ section.id }}">{{ st.nav_link2_label | default: 'Plans' }}</a></li>
+      <li><a href="#pp-calculator-{{ section.id }}">{{ st.nav_link3_label | default: 'Calculator' }}</a></li>
+      <li><a href="#pp-form-{{ section.id }}" class="sf__btn sf__btn-primary pp-lp__nav-cta">{{ st.nav_cta_label | default: 'Get Started' }}</a></li>
+    </ul>
+    <button class="pp-lp__nav-hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="pp-lp-mobile-menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="pp-lp__nav-mobile" id="pp-lp-mobile-menu" hidden>
+    <ul>
+      <li><a href="#pp-how-it-works-{{ section.id }}">{{ st.nav_link1_label | default: 'How It Works' }}</a></li>
+      <li><a href="#pp-plans-{{ section.id }}">{{ st.nav_link2_label | default: 'Plans' }}</a></li>
+      <li><a href="#pp-calculator-{{ section.id }}">{{ st.nav_link3_label | default: 'Calculator' }}</a></li>
+      <li><a href="#pp-form-{{ section.id }}" class="sf__btn sf__btn-primary w-full">{{ st.nav_cta_label | default: 'Get Started' }}</a></li>
+    </ul>
+  </div>
+</nav>
+{% endif %}
+
+
+{%- comment -%} ============================================================
+  SECTION 1: HERO
+============================================================ {%- endcomment -%}
+<section
+  id="pp-hero-{{ section.id }}"
+  class="pp-lp__hero sf-section-padding"
+  style="
+    background-color: {{ st.hero_bg_color }};
+    --section-padding-top: {{ st.padding_top }}px;
+    --section-padding-bottom: {{ st.padding_bottom }}px;
+    {% if st.hero_bg_image != blank %}
+      background-image: url('{{ st.hero_bg_image | image_url: width: 1920 }}');
+      background-size: cover;
+      background-position: center;
+    {% endif %}
+  "
+>
+  <div class="{{ st.container }} section-py">
+    <div class="pp-lp__hero-grid">
+
+      {%- comment %} Left: copy {%- endcomment %}
+      <div class="pp-lp__hero-copy{% if animated %} sf-scroll-trigger animate--{{ animation_effect }}{% endif %}">
+        {% if st.hero_eyebrow != blank %}
+          <p class="pp-lp__eyebrow">{{ st.hero_eyebrow }}</p>
+        {% endif %}
+        <h1 class="pp-lp__hero-h1">{{ st.hero_h1 }}</h1>
+        {% if st.hero_subhead != blank %}
+          <p class="pp-lp__hero-subhead">{{ st.hero_subhead }}</p>
+        {% endif %}
+
+        <ul class="pp-lp__proof-bullets" id="pp-proof-bullets-{{ section.id }}">
+          {% for i in (1..4) %}
+            {%- assign bullet_key = 'hero_bullet_' | append: i -%}
+            {% if st[bullet_key] != blank %}
+              <li class="{% if i > 2 %}pp-lp__bullet-extra{% endif %}">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="9" fill="currentColor" opacity=".15"/><path d="M5 9l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                {{ st[bullet_key] }}
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+        <button class="pp-lp__see-more" id="pp-see-more-{{ section.id }}" aria-expanded="false" aria-controls="pp-proof-bullets-{{ section.id }}">
+          + {{ st.see_more_label | default: 'See more' }}
+        </button>
+
+        <div class="pp-lp__hero-ctas">
+          <a href="#pp-form-{{ section.id }}" class="sf__btn sf__btn-primary pp-lp__cta-primary">{{ st.hero_cta_primary | default: 'Get My Plan' }}</a>
+          <a href="#pp-calculator-{{ section.id }}" class="sf__btn sf__btn-secondary pp-lp__cta-ghost">{{ st.hero_cta_secondary | default: 'Try Calculator' }}</a>
+        </div>
+
+        {% if st.hero_delivery_text != blank %}
+          <p class="pp-lp__delivery-note">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1C4.13 1 1 4.13 1 8s3.13 7 7 7 7-3.13 7-7-3.13-7-7-7zm.5 10.5h-1V7h1v4.5zm0-6h-1V4h1v1.5z" fill="currentColor"/></svg>
+            {{ st.hero_delivery_text }}
+          </p>
+        {% endif %}
+      </div>
+
+      {%- comment %} Right: plan match widget {%- endcomment %}
+      <div class="pp-lp__hero-widget{% if animated %} sf-scroll-trigger animate--{{ animation_effect }}{% endif %}" data-cascade style="--animation-order: 2;">
+        <div class="pp-lp__widget-card">
+          <p class="pp-lp__widget-header">{{ st.widget_header | default: "What's your goal?" }}</p>
+          <div class="pp-lp__goal-btns" role="group" aria-label="Select your goal">
+            <button type="button" class="pp-lp__goal-btn" data-goal="lose-fat">{{ st.widget_goal1 | default: 'Lose Fat' }}</button>
+            <button type="button" class="pp-lp__goal-btn" data-goal="build-muscle">{{ st.widget_goal2 | default: 'Build Muscle' }}</button>
+            <button type="button" class="pp-lp__goal-btn pp-lp__goal-btn--wide" data-goal="eat-clean">{{ st.widget_goal3 | default: 'Eat Clean & Consistent' }}</button>
+          </div>
+          <p class="pp-lp__diet-label">{{ st.widget_diet_label | default: 'Diet preference:' }}</p>
+          <div class="pp-lp__diet-opts" role="group" aria-label="Diet preference">
+            <label class="pp-lp__radio-label">
+              <input type="radio" name="pp-widget-diet-{{ section.id }}" value="veg"> {{ st.widget_diet_veg | default: 'Vegetarian' }}
+            </label>
+            <label class="pp-lp__radio-label">
+              <input type="radio" name="pp-widget-diet-{{ section.id }}" value="non-veg"> {{ st.widget_diet_nonveg | default: 'Non-Veg' }}
+            </label>
+          </div>
+          <a href="#pp-form-{{ section.id }}" class="sf__btn sf__btn-primary w-full pp-lp__widget-cta">{{ st.widget_cta | default: 'GET MY PLAN →' }}</a>
+          {% if st.widget_social_proof != blank %}
+            <p class="pp-lp__widget-proof">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="7" fill="#22c55e" opacity=".2"/><circle cx="7" cy="7" r="3" fill="#22c55e"/></svg>
+              {{ st.widget_social_proof }}
+            </p>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  {%- comment %} Mobile sticky CTA {%- endcomment %}
+  <div class="pp-lp__sticky-cta" id="pp-sticky-cta-{{ section.id }}" aria-live="polite">
+    <a href="#pp-form-{{ section.id }}" class="sf__btn sf__btn-primary pp-lp__sticky-btn" id="pp-sticky-btn-{{ section.id }}">{{ st.hero_cta_primary | default: 'Get My Plan' }}</a>
+  </div>
+</section>
+
+
+{%- comment -%} ============================================================
+  SECTION 2: TRUST STACK
+============================================================ {%- endcomment -%}
+<section
+  id="pp-trust-{{ section.id }}"
+  class="pp-lp__trust"
+  style="background-color: {{ st.trust_bg_color }};"
+>
+  <div class="{{ st.container }} pp-lp__trust-inner">
+    {% for i in (1..5) %}
+      {%- assign trust_key = 'trust_item_' | append: i -%}
+      {%- assign trust_icon_key = 'trust_icon_' | append: i -%}
+      {% if st[trust_key] != blank %}
+        <div class="pp-lp__trust-item{% if animated %} sf-scroll-trigger animate--{{ animation_effect }}{% endif %}" data-cascade style="--animation-order: {{ i }};">
+          {% if st[trust_icon_key] != blank %}
+            <img src="{{ st[trust_icon_key] | image_url: width: 48 }}" alt="" width="32" height="32" loading="lazy" aria-hidden="true">
+          {% else %}
+            <svg class="pp-lp__trust-icon" width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M14 2L3 7v8c0 6.6 4.7 12.8 11 14.3C20.3 27.8 25 21.6 25 15V7L14 2z" fill="currentColor" opacity=".2"/><path d="M10 14l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          {% endif %}
+          <span>{{ st[trust_key] }}</span>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+
+{%- comment -%} ============================================================
+  SECTION 3: HOW IT WORKS
+============================================================ {%- endcomment -%}
+<section
+  id="pp-how-it-works-{{ section.id }}"
+  class="pp-lp__hiw sf-section-padding"
+  style="background-color: {{ st.hiw_bg_color }}; --section-padding-top: 60px; --section-padding-bottom: 60px;"
+>
+  <div class="{{ st.container }} section-py">
+    <div class="pp-lp__section-header text-center{% if animated %} sf-scroll-trigger animate--{{ animation_effect }}{% endif %}">
+      <h2 class="h2">{{ st.hiw_heading | default: 'How It Works' }}</h2>
+      {% if st.hiw_subhead != blank %}
+        <p class="pp-lp__section-subhead">{{ st.hiw_subhead }}</p>
+      {% endif %}
+    </div>
+
+    <div class="pp-lp__hiw-steps">
+      {% for i in (1..3) %}
+        {%- assign step_title_key = 'hiw_step' | append: i | append: '_title' -%}
+        {%- assign step_desc_key  = 'hiw_step' | append: i | append: '_desc' -%}
+        {%- assign step_icon_key  = 'hiw_step' | append: i | append: '_icon' -%}
+        <div class="pp-lp__hiw-step{% if animated %} sf-scroll-trigger animate--{{ animation_effect }}{% endif %}" data-cascade style="--animation-order: {{ i }};">
+          <div class="pp-lp__hiw-step-num" aria-hidden="true">{{ i }}</div>
+          {% if st[step_icon_key] != blank %}
+            <img src="{{ st[step_icon_key] | image_url: width: 80 }}" alt="" width="60" height="60" loading="lazy" aria-hidden="true" class="pp-lp__hiw-step-img">
+          {% endif %}
+          <h3 class="pp-lp__hiw-step-title">{{ st[step_title_key] | default: 'Step ' | append: i }}</h3>
+          {% if st[step_desc_key] != blank %}
+            <p class="pp-lp__hiw-step-desc">{{ st[step_desc_key] }}</p>
+          {% endif %}
+        </div>
+        {% if i < 3 %}
+          <div class="pp-lp__hiw-arrow" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="pp-lp__cta-center">
+      <a href="#pp-form-{{ section.id }}" class="sf__btn sf__btn-primary pp-lp__cta-primary">{{ st.hiw_cta | default: 'START YOUR PLAN →' }}</a>
+    </div>
+  </div>
+</section>
+
+
+{%- comment -%} ============================================================
+  SECTION 4: BMI / BMR CALCULATOR
+============================================================ {%- endcomment -%}
+<section
+  id="pp-calculator-{{ section.id }}"
+  class="pp-lp__calc sf-section-padding"
+  style="background-color: {{ st.calc_bg_color }}; --section-padding-top: 60px; --section-padding-bottom: 60px;"
+>
+  <div class="{{ st.container }} section-py">
+    <div class="pp-lp__section-header text-center{% if animated %} sf-scroll-trigger animate--{{ animation_effect }}{% endif %}">
+      <h2 class="h2">{{ st.calc_heading | default: 'Know Your Numbers' }}</h2>
+      {% if st.calc_subhead != blank %}
+        <p class="pp-lp__section-subhead">{{ st.calc_subhead }}</p>
+      {% endif %}
+    </div>
+
+    <div class="pp-lp__calc-card">
+      {%- comment %} Tab switcher {%- endcomment %}
+      <div class="pp-lp__calc-tabs" role="tablist" aria-label="Calculator type">
+        <button class="pp-lp__calc-tab pp-lp__calc-tab--active" role="tab" aria-selected="true" aria-controls="pp-bmi-panel-{{ section.id }}" id="pp-bmi-tab-{{ section.id }}">
+          {{ st.calc_tab_bmi | default: 'BMI Calculator' }}
+          <span class="pp-lp__calc-tab-sub">{{ st.calc_tab_bmi_sub | default: '(Quick check)' }}</span>
+        </button>
+        <button class="pp-lp__calc-tab" role="tab" aria-selected="false" aria-controls="pp-bmr-panel-{{ section.id }}" id="pp-bmr-tab-{{ section.id }}">
+          {{ st.calc_tab_bmr | default: 'BMR Calculator' }}
+          <span class="pp-lp__calc-tab-sub">{{ st.calc_tab_bmr_sub | default: '(Deeper insight)' }}</span>
+        </button>
+      </div>
+
+      {%- comment %} Shared form for both tabs — hidden fields toggled by JS {%- endcomment %}
+      {%- form 'contact', id: 'pp-calc-form-' | append: section.id, class: 'pp-lp__calc-form' -%}
+        <input type="hidden" name="contact[calculator_type]" id="pp-calc-type-{{ section.id }}" value="BMI">
+        <input type="hidden" name="contact[tags]" value="bmi-bmr-lead">
+
+        {%- comment %} BMI Panel {%- endcomment %}
+        <div id="pp-bmi-panel-{{ section.id }}" role="tabpanel" aria-labelledby="pp-bmi-tab-{{ section.id }}" class="pp-lp__calc-panel pp-lp__calc-panel--active">
+          <p class="pp-lp__calc-step-label">Step 1: What's your goal?</p>
+          <div class="pp-lp__goal-btns" role="group" aria-label="Goal">
+            <button type="button" class="pp-lp__goal-btn" data-target="pp-calc-goal-{{ section.id }}" data-value="Lose Fat">Lose Fat</button>
+            <button type="button" class="pp-lp__goal-btn" data-target="pp-calc-goal-{{ section.id }}" data-value="Build Muscle">Build Muscle</button>
+            <button type="button" class="pp-lp__goal-btn pp-lp__goal-btn--wide" data-target="pp-calc-goal-{{ section.id }}" data-value="Eat Clean">Eat Clean</button>
+          </div>
+          <input type="hidden" name="contact[goal]" id="pp-calc-goal-{{ section.id }}" required>
+
+          <p class="pp-lp__calc-step-label">Step 2: Your details</p>
+          <div class="pp-lp__calc-row">
+            <div class="pp-lp__calc-field">
+              <label for="pp-height-{{ section.id }}">Height</label>
+              <div class="pp-lp__unit-field">
+                <input type="number" id="pp-height-{{ section.id }}" name="contact[height]" placeholder="e.g. 170" min="50" max="300" required>
+                <select name="contact[height_unit]" aria-label="Height unit">
+                  <option value="cm">cm</option>
+                  <option value="ft">ft</option>
+                </select>
+              </div>
+            </div>
+            <div class="pp-lp__calc-field">
+              <label for="pp-weight-{{ section.id }}">Weight</label>
+              <div class="pp-lp__unit-field">
+                <input type="number" id="pp-weight-{{ section.id }}" name="contact[weight]" placeholder="e.g. 70" min="20" max="500" required>
+                <select name="contact[weight_unit]" aria-label="Weight unit">
+                  <option value="kg">kg</option>
+                  <option value="lbs">lbs</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {%- comment %} BMR Panel (hidden by default) {%- endcomment %}
+        <div id="pp-bmr-panel-{{ section.id }}" role="tabpanel" aria-labelledby="pp-bmr-tab-{{ section.id }}" class="pp-lp__calc-panel" hidden>
+          <p class="pp-lp__calc-step-label">Step 1: What's your goal?</p>
+          <div class="pp-lp__goal-btns" role="group" aria-label="Goal">
+            <button type="button" class="pp-lp__goal-btn" data-target="pp-calc-goal-{{ section.id }}" data-value="Lose Fat">Lose Fat</button>
+            <button type="button" class="pp-lp__goal-btn" data-target="pp-calc-goal-{{ section.id }}" data-value="Build Muscle">Build Muscle</button>
+            <button type="button" class="pp-lp__goal-btn pp-lp__goal-btn--wide" data-target="pp-calc-goal-{{ section.id }}" data-value="Eat Clean">Eat Clean</button>
+          </div>
+
+          <p class="pp-lp__calc-step-label">Step 2: Your details</p>
+          <div class="pp-lp__calc-row">
+            <div class="pp-lp__calc-field">
+              <label for="pp-bmr-height-{{ section.id }}">Height</label>
+              <div class="pp-lp__unit-field">
+                <input type="number" id="pp-bmr-height-{{ section.id }}" name="contact[bmr_height]" placeholder="e.g. 170" min="50" max="300">
+                <select name="contact[bmr_height_unit]" aria-label="Height unit">
+                  <option value="cm">cm</option>
+                  <option value="ft">ft</option>
+                </select>
+              </div>
+            </div>
+            <div class="pp-lp__calc-field">
+              <label for="pp-bmr-weight-{{ section.id }}">Weight</label>
+              <div class="pp-lp__unit-field">
+                <input type="number" id="pp-bmr-weight-{{ section.id }}" name="contact[bmr_weight]" placeholder="e.g. 70" min="20" max="500">
+                <select name="contact[bmr_weight_unit]" aria-label="Weight unit">
+                  <option value="kg">kg</option>
+                  <option value="lbs">lbs</option>
+                </select>
+              </div>
+            </div>
+            <div class="pp-lp__calc-field">
+              <label for="pp-age-{{ section.id }}">Age</label>
+              <input type="number" id="pp-age-{{ section.id }}" name="contact[age]" placeholder="e.g. 28" min="13" max="100">
+            </div>
+            <div class="pp-lp__calc-field">
+              <label for="pp-gender-{{ section.id }}">Gender</label>
+              <select id="pp-gender-{{ section.id }}" name="contact[gender]">
+                <option value="">Select</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="prefer-not-to-say">Prefer not to say</option>
+              </select>
+            </div>
+            <div class="pp-lp__calc-field pp-lp__calc-field--full">
+              <label for="pp-activity-{{ section.id }}">Activity Level</label>
+              <select id="pp-activity-{{ section.id }}" name="contact[activity_level]">
+                <option value="">Select activity level</option>
+                <option value="sedentary">Sedentary (little or no exercise)</option>
+                <option value="lightly-active">Lightly Active (1-3 days/week)</option>
+                <option value="moderately-active">Moderately Active (3-5 days/week)</option>
+                <option value="very-active">Very Active (6-7 days/week)</option>
+                <option value="extremely-active">Extremely Active (physical job + training)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {%- comment %} Step 3: Contact — shared {%- endcomment %}
+        <p class="pp-lp__calc-step-label">Step 3: Get your report</p>
+        <div class="pp-lp__calc-row">
+          <div class="pp-lp__calc-field">
+            <label for="pp-calc-name-{{ section.id }}">Name *</label>
+            <input type="text" id="pp-calc-name-{{ section.id }}" name="contact[name]" placeholder="Your first name" required>
+          </div>
+          <div class="pp-lp__calc-field">
+            <label for="pp-calc-email-{{ section.id }}">Email *</label>
+            <input type="email" id="pp-calc-email-{{ section.id }}" name="contact[email]" placeholder="your@email.com" required>
+          </div>
+          <div class="pp-lp__calc-field pp-lp__calc-field--full">
+            <label for="pp-calc-phone-{{ section.id }}">Phone (optional)</label>
+            <div class="pp-lp__phone-row">
+              <input type="tel" id="pp-calc-phone-{{ section.id }}" name="contact[phone]" placeholder="Your phone number">
+              <label class="pp-lp__check-label">
+                <input type="checkbox" name="contact[whatsapp_report]" value="yes">
+                Send via WhatsApp
+              </label>
+            </div>
+          </div>
+        </div>
+
+        {% render 'form__success', form: form, success_message: 'Thanks! Your report is on its way.' %}
+        {% render 'form__error', form: form %}
+
+        <button type="submit" class="sf__btn sf__btn-primary pp-lp__cta-primary">
+          {{ st.calc_cta | default: 'GET MY REPORT →' }}
+        </button>
+        <p class="pp-lp__calc-disclaimer">{{ st.calc_disclaimer | default: '⚠ Not medical advice. For reference only.' }}</p>
+      {%- endform -%}
+
+      {%- comment %} Results panel (shown by JS after calculation) {%- endcomment %}
+      <div class="pp-lp__calc-results" id="pp-calc-results-{{ section.id }}" hidden aria-live="polite">
+        <h3 class="pp-lp__calc-results-title">Your Results</h3>
+        <p class="pp-lp__calc-results-greeting">Hi <span id="pp-result-name-{{ section.id }}"></span>! Here's your summary:</p>
+        <div class="pp-lp__calc-gauge">
+          <div class="pp-lp__calc-gauge-value" id="pp-result-value-{{ section.id }}">—</div>
+          <div class="pp-lp__calc-gauge-label" id="pp-result-category-{{ section.id }}">—</div>
+        </div>
+        <p class="pp-lp__calc-goal-line">Based on your goal: <strong id="pp-result-goal-{{ section.id }}"></strong></p>
+        <div class="pp-lp__cta-center" style="margin-top: 1.5rem;">
+          <a href="#pp-form-{{ section.id }}" class="sf__btn sf__btn-primary pp-lp__cta-primary">{{ st.calc_results_cta | default: 'GET MY PLAN & PRICING →' }}</a>
+        </div>
+        <p class="pp-lp__calc-email-note">Full report sent to your email.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{%- comment -%} ============================================================
+  SECTION 5: PLAN PREVIEW / MENU
+============================================================ {%- endcomment -%}
+<section
+  id="pp-plans-{{ section.id }}"
+  class="pp-lp__menu sf-section-padding"
+  style="background-color: {{ st.menu_bg_color }}; --section-padding-top: 60px; --section-padding-bottom: 60px;"
+>
+  <div class="{{ st.container }} section-py">
+    <div class="pp-lp__section-header text-center{% if animated %} sf-scroll-trigger animate--{{ animation_effect }}{% endif %}">
+      <h2 class="h2">{{ st.menu_heading | default: "What's on the Menu" }}</h2>
+      {% if st.menu_subhead != blank %}
+        <p class="pp-lp__section-subhead">{{ st.menu_subhead }}</p>
+      {% endif %}
+    </div>
+
+    <div class="pp-lp__menu-tabs" role="tablist" aria-label="Diet type">
+      <button class="pp-lp__menu-tab pp-lp__menu-tab--active" role="tab" aria-selected="true" data-filter="veg" aria-controls="pp-menu-grid-{{ section.id }}">{{ st.menu_tab_veg | default: 'VEG' }}</button>
+      <button class="pp-lp__menu-tab" role="tab" aria-selected="false" data-filter="non-veg" aria-controls="pp-menu-grid-{{ section.id }}">{{ st.menu_tab_nonveg | default: 'NON-VEG' }}</button>
+    </div>
+
+    <div class="pp-lp__menu-grid" id="pp-menu-grid-{{ section.id }}">
+      {%- assign meal_blocks = section.blocks | where: 'type', 'meal_card' -%}
+      {% if meal_blocks.size > 0 %}
+        {% for block in meal_blocks %}
+          {%- assign bs = block.settings -%}
+          <div class="pp-lp__meal-card" data-diet="{{ bs.diet_type }}" {{ block.shopify_attributes }}>
+            <div class="pp-lp__meal-img-wrap">
+              {% if bs.meal_image != blank %}
+                <img src="{{ bs.meal_image | image_url: width: 400 }}" alt="{{ bs.meal_name }}" width="300" height="240" loading="lazy" class="pp-lp__meal-img">
+              {% else %}
+                {{ 'product-1' | placeholder_svg_tag: 'pp-lp__meal-img-placeholder' }}
+              {% endif %}
+              <span class="pp-lp__diet-badge pp-lp__diet-badge--{{ bs.diet_type }}">{{ bs.diet_type | upcase }}</span>
+            </div>
+            <div class="pp-lp__meal-info">
+              <h4 class="pp-lp__meal-name">{{ bs.meal_name }}</h4>
+              <div class="pp-lp__macros">
+                <span class="pp-lp__macro pp-lp__macro--protein">P: {{ bs.protein }}g</span>
+                <span class="pp-lp__macro pp-lp__macro--carbs">C: {{ bs.carbs }}g</span>
+                <span class="pp-lp__macro pp-lp__macro--fat">F: {{ bs.fat }}g</span>
+                <span class="pp-lp__macro pp-lp__macro--cal">{{ bs.calories }} cal</span>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        {%- comment %} Default placeholder cards {%- endcomment %}
+        {% assign placeholder_meals = "Paneer Tikka Bowl,Chicken Biryani,Dal Tadka + Quinoa,Keema Paratha" | split: "," %}
+        {% assign placeholder_diets = "veg,non-veg,veg,non-veg" | split: "," %}
+        {% assign placeholder_proteins = "35,42,28,38" | split: "," %}
+        {% assign placeholder_carbs = "45,52,40,35" | split: "," %}
+        {% assign placeholder_fats = "18,15,12,20" | split: "," %}
+        {% assign placeholder_cals = "480,510,380,470" | split: "," %}
+        {% for meal in placeholder_meals %}
+          <div class="pp-lp__meal-card" data-diet="{{ placeholder_diets[forloop.index0] }}">
+            <div class="pp-lp__meal-img-wrap">
+              {{ 'product-1' | placeholder_svg_tag: 'pp-lp__meal-img-placeholder' }}
+              <span class="pp-lp__diet-badge pp-lp__diet-badge--{{ placeholder_diets[forloop.index0] }}">{{ placeholder_diets[forloop.index0] | upcase }}</span>
+            </div>
+            <div class="pp-lp__meal-info">
+              <h4 class="pp-lp__meal-name">{{ meal }}</h4>
+              <div class="pp-lp__macros">
+                <span class="pp-lp__macro pp-lp__macro--protein">P: {{ placeholder_proteins[forloop.index0] }}g</span>
+                <span class="pp-lp__macro pp-lp__macro--carbs">C: {{ placeholder_carbs[forloop.index0] }}g</span>
+                <span class="pp-lp__macro pp-lp__macro--fat">F: {{ placeholder_fats[forloop.index0] }}g</span>
+                <span class="pp-lp__macro pp-lp__macro--cal">{{ placeholder_cals[forloop.index0] }} cal</span>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    {% if st.menu_rotate_note != blank %}
+      <p class="pp-lp__menu-note text-center">{{ st.menu_rotate_note }}</p>
+    {% endif %}
+    <div class="pp-lp__cta-center">
+      <a href="#pp-form-{{ section.id }}" class="sf__btn sf__btn-primary pp-lp__cta-primary">{{ st.menu_cta | default: 'GET PLAN DETAILS →' }}</a>
+    </div>
+  </div>
+</section>
+
+
+{%- comment -%} ============================================================
+  SECTION 6: TESTIMONIALS / SOCIAL PROOF
+============================================================ {%- endcomment -%}
+<section
+  id="pp-testimonials-{{ section.id }}"
+  class="pp-lp__testimonials sf-section-padding"
+  style="background-color: {{ st.testimonials_bg_color }}; --section-padding-top: 60px; --section-padding-bottom: 60px;"
+>
+  <div class="{{ st.container }} section-py">
+    <div class="pp-lp__section-header text-center{% if animated %} sf-scroll-trigger animate--{{ animation_effect }}{% endif %}">
+      <h2 class="h2">{{ st.testimonials_heading | default: 'What Our Subscribers Say' }}</h2>
+    </div>
+
+    <div class="pp-lp__testimonials-track" id="pp-testimonials-track-{{ section.id }}" role="list">
+      {%- assign testimonial_blocks = section.blocks | where: 'type', 'testimonial' -%}
+      {% if testimonial_blocks.size > 0 %}
+        {% for block in testimonial_blocks %}
+          {%- assign bs = block.settings -%}
+          <div class="pp-lp__testimonial-card{% if animated %} sf-scroll-trigger animate--{{ animation_effect }}{% endif %}" data-cascade style="--animation-order: {{ forloop.index }};" role="listitem" {{ block.shopify_attributes }}>
+            {% if st.testimonials_show_stars %}
+              <div class="pp-lp__stars" aria-label="5 stars">
+                {% for i in (1..5) %}<svg width="16" height="16" viewBox="0 0 16 16" fill="#f59e0b" aria-hidden="true"><path d="M8 1l1.8 4H14l-3.4 2.5 1.3 4.1L8 9.1l-3.9 2.5 1.3-4.1L2 5h4.2z"/></svg>{% endfor %}
+              </div>
+            {% endif %}
+            <blockquote class="pp-lp__testimonial-quote">
+              {{ bs.description | default: '"[Add your customer quote here. Keep it to 2-3 sentences for best impact.]"' }}
+            </blockquote>
+            <div class="pp-lp__testimonial-author">
+              {% if bs.image != blank %}
+                <img src="{{ bs.image | image_url: width: 80 }}" alt="{{ bs.footer }}" width="44" height="44" loading="lazy" class="pp-lp__testimonial-avatar">
+              {% else %}
+                <div class="pp-lp__testimonial-avatar pp-lp__testimonial-avatar--initials" aria-hidden="true">
+                  {{ bs.footer | default: 'A B' | split: ' ' | map: 'first' | join: '' | upcase | truncate: 2, '' }}
+                </div>
+              {% endif %}
+              <div>
+                <p class="pp-lp__testimonial-name">{{ bs.footer | default: '[Customer Name]' }}</p>
+                {% if bs.image_text != blank %}
+                  <p class="pp-lp__testimonial-context">{{ bs.image_text }}</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        {%- comment %} Placeholder cards {%- endcomment %}
+        {% for i in (1..3) %}
+          <div class="pp-lp__testimonial-card" role="listitem">
+            {% if st.testimonials_show_stars %}
+              <div class="pp-lp__stars" aria-label="5 stars">
+                {% for j in (1..5) %}<svg width="16" height="16" viewBox="0 0 16 16" fill="#f59e0b" aria-hidden="true"><path d="M8 1l1.8 4H14l-3.4 2.5 1.3 4.1L8 9.1l-3.9 2.5 1.3-4.1L2 5h4.2z"/></svg>{% endfor %}
+              </div>
+            {% endif %}
+            <blockquote class="pp-lp__testimonial-quote">"[Add a real customer quote here. Describe what changed for them since starting the plan.]"</blockquote>
+            <div class="pp-lp__testimonial-author">
+              <div class="pp-lp__testimonial-avatar pp-lp__testimonial-avatar--initials" aria-hidden="true">PP</div>
+              <div>
+                <p class="pp-lp__testimonial-name">[Customer Name]</p>
+                <p class="pp-lp__testimonial-context">[City, Goal Plan]</p>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="pp-lp__cta-center">
+      <a href="#pp-form-{{ section.id }}" class="sf__btn sf__btn-primary pp-lp__cta-primary">{{ st.testimonials_cta | default: 'JOIN THEM →' }}</a>
+    </div>
+  </div>
+</section>
+
+
+{%- comment -%} ============================================================
+  SECTION 7: OBJECTION HANDLER
+============================================================ {%- endcomment -%}
+<section
+  id="pp-objections-{{ section.id }}"
+  class="pp-lp__objections sf-section-padding"
+  style="background-color: {{ st.objections_bg_color }}; --section-padding-top: 60px; --section-padding-bottom: 60px;"
+>
+  <div class="{{ st.container }} section-py">
+    <div class="pp-lp__section-header text-center{% if animated %} sf-scroll-trigger animate--{{ animation_effect }}{% endif %}">
+      <h2 class="h2">{{ st.objections_heading | default: 'Quick Answers' }}</h2>
+      {% if st.objections_subhead != blank %}
+        <p class="pp-lp__section-subhead">{{ st.objections_subhead }}</p>
+      {% endif %}
+    </div>
+
+    <div class="pp-lp__objections-grid">
+      {%- assign objection_blocks = section.blocks | where: 'type', 'objection' -%}
+      {% if objection_blocks.size > 0 %}
+        {% for block in objection_blocks %}
+          {%- assign bs = block.settings -%}
+          <details class="pp-lp__objection-item{% if animated %} sf-scroll-trigger animate--{{ animation_effect }}{% endif %}" data-cascade style="--animation-order: {{ forloop.index }};" {{ block.shopify_attributes }}>
+            <summary class="pp-lp__objection-q">
+              {{ bs.question }}
+              <svg class="pp-lp__objection-chevron" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <div class="pp-lp__objection-a">{{ bs.answer }}</div>
+          </details>
+        {% endfor %}
+      {% else %}
+        {%- comment %} Default objections from wireframe {%- endcomment %}
+        {% assign default_qs = "Will it actually taste Desi?,What if I'm vegetarian?,Do you deliver to my area?,Can I pause or skip weeks?,Will I actually see results?,Is the calculator accurate?" | split: "," %}
+        {% assign default_as = "100%. We're not doing fusion for the sake of it. These are proper Indian flavors — just macro-optimized.,Full veg menu available. Paneer, dal, chole, the works. Same macro focus, same taste standards.,We cover the GTA: Toronto, Mississauga, Brampton, Vaughan, Markham, and surrounding areas.,Yep. Pause, skip, or cancel anytime from your dashboard. No contracts, no hassle.,Results depend on consistency. We give you the meals. You bring the commitment. Together, that's how progress happens.,Our BMI/BMR tools give you a reference point, not a medical diagnosis. For personalized advice, consult a professional." | split: "," %}
+        {% for q in default_qs %}
+          <details class="pp-lp__objection-item">
+            <summary class="pp-lp__objection-q">
+              {{ q }}
+              <svg class="pp-lp__objection-chevron" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <div class="pp-lp__objection-a">{{ default_as[forloop.index0] }}</div>
+          </details>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+
+{%- comment -%} ============================================================
+  SECTION 8: PRIMARY FORM (HIGH-INTENT)
+============================================================ {%- endcomment -%}
+<section
+  id="pp-form-{{ section.id }}"
+  class="pp-lp__primary-form sf-section-padding"
+  style="background-color: {{ st.form_bg_color }}; --section-padding-top: 60px; --section-padding-bottom: 60px;"
+>
+  <div class="{{ st.container }} section-py">
+    <div class="pp-lp__section-header text-center{% if animated %} sf-scroll-trigger animate--{{ animation_effect }}{% endif %}">
+      <h2 class="h2">{{ st.form_heading | default: 'Ready to Get Started?' }}</h2>
+      {% if st.form_subhead != blank %}
+        <p class="pp-lp__section-subhead">{{ st.form_subhead }}</p>
+      {% endif %}
+      {% if st.form_microcopy != blank %}
+        <p class="pp-lp__form-microcopy">{{ st.form_microcopy }}</p>
+      {% endif %}
+    </div>
+
+    <div class="pp-lp__multistep-wrap">
+      {%- form 'contact', id: 'pp-primary-form-' | append: section.id, class: 'pp-lp__multistep-form' -%}
+        <input type="hidden" name="contact[tags]" value="high-intent-lead">
+
+        {%- comment %} Step progress indicator {%- endcomment %}
+        <div class="pp-lp__step-indicator" aria-label="Form progress" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="3">
+          <div class="pp-lp__step-dot pp-lp__step-dot--active" data-step="1">
+            <span>1</span><small>Your Goals</small>
+          </div>
+          <div class="pp-lp__step-line"></div>
+          <div class="pp-lp__step-dot" data-step="2">
+            <span>2</span><small>Contact</small>
+          </div>
+          <div class="pp-lp__step-line"></div>
+          <div class="pp-lp__step-dot" data-step="3">
+            <span>3</span><small>Preferences</small>
+          </div>
+        </div>
+
+        {%- comment %} STEP 1: Goals {%- endcomment %}
+        <div class="pp-lp__form-step pp-lp__form-step--active" data-step="1">
+          <h3 class="pp-lp__form-step-title">Your Goals</h3>
+
+          <div class="pp-lp__form-field">
+            <label class="pp-lp__form-label">What's your primary goal? *</label>
+            <div class="pp-lp__goal-btns" role="group" aria-label="Primary goal">
+              <button type="button" class="pp-lp__goal-btn" data-target="pp-form-goal-{{ section.id }}" data-value="Lose Fat">Lose Fat</button>
+              <button type="button" class="pp-lp__goal-btn" data-target="pp-form-goal-{{ section.id }}" data-value="Build Muscle">Build Muscle</button>
+              <button type="button" class="pp-lp__goal-btn pp-lp__goal-btn--wide" data-target="pp-form-goal-{{ section.id }}" data-value="Eat Clean & Consistent">Eat Clean & Consistent</button>
+            </div>
+            <input type="hidden" name="contact[goal]" id="pp-form-goal-{{ section.id }}" required>
+          </div>
+
+          <div class="pp-lp__form-field">
+            <label class="pp-lp__form-label">Diet preference? *</label>
+            <div class="pp-lp__radio-group" role="radiogroup">
+              <label class="pp-lp__radio-label"><input type="radio" name="contact[diet]" value="Vegetarian" required> Vegetarian</label>
+              <label class="pp-lp__radio-label"><input type="radio" name="contact[diet]" value="Non-Veg"> Non-Veg</label>
+              <label class="pp-lp__radio-label"><input type="radio" name="contact[diet]" value="Both are fine"> Both are fine</label>
+            </div>
+          </div>
+
+          <div class="pp-lp__form-field">
+            <label for="pp-form-area-{{ section.id }}" class="pp-lp__form-label">Where do you need delivery? *</label>
+            <select id="pp-form-area-{{ section.id }}" name="contact[delivery_area]" required class="pp-lp__select">
+              <option value="">Select your city</option>
+              <option value="Toronto">Toronto</option>
+              <option value="Mississauga">Mississauga</option>
+              <option value="Brampton">Brampton</option>
+              <option value="Vaughan">Vaughan</option>
+              <option value="Markham">Markham</option>
+              <option value="Scarborough">Scarborough</option>
+              <option value="North York">North York</option>
+              <option value="Etobicoke">Etobicoke</option>
+              <option value="Other GTA">Other GTA area</option>
+              <option value="Outside GTA">Outside GTA (join waitlist)</option>
+            </select>
+          </div>
+
+          <div class="pp-lp__form-field">
+            <label class="pp-lp__form-label">When are you looking to start? *</label>
+            <div class="pp-lp__radio-group" role="radiogroup">
+              <label class="pp-lp__radio-label"><input type="radio" name="contact[start_timeline]" value="This week" required> This week</label>
+              <label class="pp-lp__radio-label"><input type="radio" name="contact[start_timeline]" value="Next week"> Next week</label>
+              <label class="pp-lp__radio-label"><input type="radio" name="contact[start_timeline]" value="In 2+ weeks"> In 2+ weeks</label>
+              <label class="pp-lp__radio-label"><input type="radio" name="contact[start_timeline]" value="Just exploring"> Just exploring</label>
+            </div>
+          </div>
+
+          <button type="button" class="sf__btn sf__btn-primary pp-lp__cta-primary pp-lp__next-btn" data-next="2">CONTINUE →</button>
+        </div>
+
+        {%- comment %} STEP 2: Contact {%- endcomment %}
+        <div class="pp-lp__form-step" data-step="2" hidden>
+          <h3 class="pp-lp__form-step-title">Your Contact</h3>
+
+          <div class="pp-lp__form-field">
+            <label for="pp-form-name-{{ section.id }}" class="pp-lp__form-label">First name *</label>
+            <input type="text" id="pp-form-name-{{ section.id }}" name="contact[name]" placeholder="Your first name" required class="pp-lp__input">
+          </div>
+
+          <div class="pp-lp__form-field">
+            <label for="pp-form-email-{{ section.id }}" class="pp-lp__form-label">Email address *</label>
+            <input type="email" id="pp-form-email-{{ section.id }}" name="contact[email]" placeholder="your@email.com" required class="pp-lp__input">
+            <small class="pp-lp__field-hint">We'll send your plan details here</small>
+          </div>
+
+          <div class="pp-lp__form-field">
+            <label for="pp-form-phone-{{ section.id }}" class="pp-lp__form-label">Phone number</label>
+            <input type="tel" id="pp-form-phone-{{ section.id }}" name="contact[phone]" placeholder="Your phone number" class="pp-lp__input" id="pp-phone-field-{{ section.id }}">
+            <label class="pp-lp__check-label" style="margin-top: 0.5rem;">
+              <input type="checkbox" id="pp-whatsapp-check-{{ section.id }}" name="contact[wants_whatsapp]" value="yes">
+              I'd like a callback or WhatsApp message
+            </label>
+          </div>
+
+          <div class="pp-lp__form-field">
+            <label class="pp-lp__form-label">How should we reach you?</label>
+            <div class="pp-lp__radio-group" role="radiogroup">
+              <label class="pp-lp__radio-label"><input type="radio" name="contact[contact_pref]" value="Email only" checked> Email only</label>
+              <label class="pp-lp__radio-label"><input type="radio" name="contact[contact_pref]" value="Call me"> Call me</label>
+              <label class="pp-lp__radio-label"><input type="radio" name="contact[contact_pref]" value="WhatsApp me"> WhatsApp me</label>
+            </div>
+          </div>
+
+          <div class="pp-lp__form-nav">
+            <button type="button" class="sf__btn sf__btn-secondary pp-lp__back-btn" data-back="1">← Back</button>
+            <button type="button" class="sf__btn sf__btn-primary pp-lp__next-btn" data-next="3">CONTINUE →</button>
+          </div>
+        </div>
+
+        {%- comment %} STEP 3: Preferences {%- endcomment %}
+        <div class="pp-lp__form-step" data-step="3" hidden>
+          <h3 class="pp-lp__form-step-title">Almost Done! <span class="pp-lp__optional-label">(Optional — helps us help you)</span></h3>
+
+          <div class="pp-lp__form-field">
+            <label class="pp-lp__form-label">How many meals per week are you thinking?</label>
+            <div class="pp-lp__radio-group" role="radiogroup">
+              <label class="pp-lp__radio-label"><input type="radio" name="contact[meals_per_week]" value="5-7 meals"> 5–7 meals</label>
+              <label class="pp-lp__radio-label"><input type="radio" name="contact[meals_per_week]" value="8-14 meals"> 8–14 meals</label>
+              <label class="pp-lp__radio-label"><input type="radio" name="contact[meals_per_week]" value="15+ meals"> 15+ meals</label>
+              <label class="pp-lp__radio-label"><input type="radio" name="contact[meals_per_week]" value="Not sure yet"> Not sure yet</label>
+            </div>
+          </div>
+
+          <div class="pp-lp__form-field">
+            <label class="pp-lp__form-label">Approximate budget per week?</label>
+            <div class="pp-lp__radio-group" role="radiogroup">
+              <label class="pp-lp__radio-label"><input type="radio" name="contact[budget]" value="Under $100"> Under $100</label>
+              <label class="pp-lp__radio-label"><input type="radio" name="contact[budget]" value="$100-150"> $100–150</label>
+              <label class="pp-lp__radio-label"><input type="radio" name="contact[budget]" value="$150-200"> $150–200</label>
+              <label class="pp-lp__radio-label"><input type="radio" name="contact[budget]" value="$200+"> $200+</label>
+              <label class="pp-lp__radio-label"><input type="radio" name="contact[budget]" value="Flexible"> Flexible</label>
+            </div>
+          </div>
+
+          <div class="pp-lp__form-field">
+            <label for="pp-form-restrictions-{{ section.id }}" class="pp-lp__form-label">Anything we should avoid? (allergies, preferences)</label>
+            <input type="text" id="pp-form-restrictions-{{ section.id }}" name="contact[dietary_restrictions]" placeholder='e.g. "No seafood", "Allergic to nuts"' class="pp-lp__input">
+          </div>
+
+          {% render 'form__success', form: form, success_message: "You're in! We'll be in touch within 2 hours." %}
+          {% render 'form__error', form: form %}
+
+          <div class="pp-lp__form-nav">
+            <button type="button" class="sf__btn sf__btn-secondary pp-lp__back-btn" data-back="2">← Back</button>
+            <button type="submit" class="sf__btn sf__btn-primary pp-lp__cta-primary">{{ st.form_submit_label | default: 'GET MY PLAN & PRICING' }}</button>
+          </div>
+          <div class="pp-lp__form-skip">
+            <button type="submit" class="pp-lp__skip-link">Skip and submit →</button>
+          </div>
+        </div>
+
+      {%- endform -%}
+
+      {%- comment %} What Happens Next checklist {%- endcomment %}
+      <div class="pp-lp__whats-next">
+        <p class="pp-lp__whats-next-title">{{ st.form_next_heading | default: 'After you submit:' }}</p>
+        <ul class="pp-lp__whats-next-list">
+          {% for i in (1..4) %}
+            {%- assign next_key = 'form_next_item_' | append: i -%}
+            {% if st[next_key] != blank %}
+              <li>
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="9" fill="#3c6e71" opacity=".15"/><path d="M5 9l3 3 5-5" stroke="#3c6e71" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                {{ st[next_key] }}
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+        {% if st.form_response_time != blank %}
+          <p class="pp-lp__response-time">{{ st.form_response_time }}</p>
+        {% endif %}
+        {% if st.form_no_pressure != blank %}
+          <p class="pp-lp__no-pressure">{{ st.form_no_pressure }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{%- comment -%} ============================================================
+  SECTION 9: FINAL CTA
+============================================================ {%- endcomment -%}
+<section
+  id="pp-final-cta-{{ section.id }}"
+  class="pp-lp__final-cta sf-section-padding"
+  style="background-color: {{ st.final_cta_bg_color }}; color: {{ st.final_cta_text_color }}; --section-padding-top: 80px; --section-padding-bottom: 80px;"
+>
+  <div class="{{ st.container }} section-py text-center">
+    <h2 class="pp-lp__final-cta-heading{% if animated %} sf-scroll-trigger animate--{{ animation_effect }}{% endif %}">
+      {{ st.final_cta_heading | default: 'Ready to Eat Better?' }}
+    </h2>
+    {% if st.final_cta_subhead != blank %}
+      <p class="pp-lp__final-cta-sub">{{ st.final_cta_subhead }}</p>
+    {% endif %}
+    <a href="#pp-form-{{ section.id }}" class="sf__btn pp-lp__final-cta-btn">{{ st.final_cta_btn | default: 'GET STARTED →' }}</a>
+    {% if st.final_cta_zones != blank %}
+      <p class="pp-lp__final-zones">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1C5.24 1 3 3.24 3 6c0 4 5 9 5 9s5-5 5-9c0-2.76-2.24-5-5-5zm0 6.5C6.62 7.5 5.5 6.38 5.5 5S6.62 2.5 8 2.5 10.5 3.62 10.5 5 9.38 7.5 8 7.5z" fill="currentColor"/></svg>
+        {{ st.final_cta_zones }}
+      </p>
+    {% endif %}
+    {% if st.final_cta_out_of_zone != blank %}
+      <p class="pp-lp__final-waitlist">
+        {{ st.final_cta_out_of_zone }}
+        {% if st.final_cta_waitlist_link != blank %}
+          <a href="{{ st.final_cta_waitlist_link }}" class="pp-lp__waitlist-link">Join waitlist</a>
+        {% endif %}
+      </p>
+    {% endif %}
+  </div>
+</section>
+
+
+{%- comment -%} ============================================================
+  JAVASCRIPT
+============================================================ {%- endcomment -%}
+<script>
+(function() {
+  'use strict';
+
+  // ── Mobile nav hamburger ──────────────────────────────────────────────────
+  var hamburger = document.querySelector('.pp-lp__nav-hamburger');
+  var mobileMenu = document.getElementById('pp-lp-mobile-menu');
+  if (hamburger && mobileMenu) {
+    hamburger.addEventListener('click', function() {
+      var isOpen = hamburger.getAttribute('aria-expanded') === 'true';
+      hamburger.setAttribute('aria-expanded', String(!isOpen));
+      mobileMenu.hidden = isOpen;
+    });
+    // Close on link click
+    mobileMenu.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        hamburger.setAttribute('aria-expanded', 'false');
+        mobileMenu.hidden = true;
+      });
+    });
+  }
+
+  // ── Proof bullets "see more" toggle ──────────────────────────────────────
+  var seeMoreBtn = document.getElementById('pp-see-more-{{ section.id }}');
+  if (seeMoreBtn) {
+    var extras = document.querySelectorAll('#pp-proof-bullets-{{ section.id }} .pp-lp__bullet-extra');
+    if (extras.length === 0) {
+      seeMoreBtn.style.display = 'none';
+    } else {
+      extras.forEach(function(el) { el.style.display = 'none'; });
+      seeMoreBtn.addEventListener('click', function() {
+        var expanded = seeMoreBtn.getAttribute('aria-expanded') === 'true';
+        extras.forEach(function(el) { el.style.display = expanded ? 'none' : 'flex'; });
+        seeMoreBtn.setAttribute('aria-expanded', String(!expanded));
+        seeMoreBtn.textContent = expanded ? '+ {{ st.see_more_label | default: "See more" }}' : '− {{ st.see_less_label | default: "See less" }}';
+      });
+    }
+  }
+
+  // ── Goal selection buttons ────────────────────────────────────────────────
+  document.querySelectorAll('.pp-lp__goal-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var group = btn.closest('.pp-lp__goal-btns');
+      group.querySelectorAll('.pp-lp__goal-btn').forEach(function(b) {
+        b.classList.remove('pp-lp__goal-btn--selected');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      btn.classList.add('pp-lp__goal-btn--selected');
+      btn.setAttribute('aria-pressed', 'true');
+      var targetId = btn.getAttribute('data-target');
+      if (targetId) {
+        var hiddenInput = document.getElementById(targetId);
+        if (hiddenInput) hiddenInput.value = btn.getAttribute('data-value');
+      }
+    });
+  });
+
+  // ── Calculator tabs ───────────────────────────────────────────────────────
+  var bmiTab = document.getElementById('pp-bmi-tab-{{ section.id }}');
+  var bmrTab = document.getElementById('pp-bmr-tab-{{ section.id }}');
+  var bmiPanel = document.getElementById('pp-bmi-panel-{{ section.id }}');
+  var bmrPanel = document.getElementById('pp-bmr-panel-{{ section.id }}');
+  var calcType = document.getElementById('pp-calc-type-{{ section.id }}');
+  if (bmiTab && bmrTab) {
+    bmiTab.addEventListener('click', function() {
+      bmiTab.classList.add('pp-lp__calc-tab--active');
+      bmiTab.setAttribute('aria-selected', 'true');
+      bmrTab.classList.remove('pp-lp__calc-tab--active');
+      bmrTab.setAttribute('aria-selected', 'false');
+      bmiPanel.hidden = false;
+      bmrPanel.hidden = true;
+      if (calcType) calcType.value = 'BMI';
+    });
+    bmrTab.addEventListener('click', function() {
+      bmrTab.classList.add('pp-lp__calc-tab--active');
+      bmrTab.setAttribute('aria-selected', 'true');
+      bmiTab.classList.remove('pp-lp__calc-tab--active');
+      bmiTab.setAttribute('aria-selected', 'false');
+      bmrPanel.hidden = false;
+      bmiPanel.hidden = true;
+      if (calcType) calcType.value = 'BMR';
+    });
+  }
+
+  // ── Calculator local computation + results reveal ─────────────────────────
+  var calcForm = document.getElementById('pp-calc-form-{{ section.id }}');
+  var calcResults = document.getElementById('pp-calc-results-{{ section.id }}');
+  if (calcForm && calcResults) {
+    calcForm.addEventListener('submit', function(e) {
+      var type = calcType ? calcType.value : 'BMI';
+      var name = document.getElementById('pp-calc-name-{{ section.id }}').value;
+      var goal = document.getElementById('pp-calc-goal-{{ section.id }}') ? document.getElementById('pp-calc-goal-{{ section.id }}').value : '';
+      var h = parseFloat(document.getElementById('pp-height-{{ section.id }}') ? document.getElementById('pp-height-{{ section.id }}').value : 0);
+      var w = parseFloat(document.getElementById('pp-weight-{{ section.id }}') ? document.getElementById('pp-weight-{{ section.id }}').value : 0);
+      var hUnit = calcForm.querySelector('[name="contact[height_unit]"]');
+      var wUnit = calcForm.querySelector('[name="contact[weight_unit]"]');
+      if (h > 0 && w > 0) {
+        var hM = hUnit && hUnit.value === 'ft' ? h * 0.3048 : h / 100;
+        var wKg = wUnit && wUnit.value === 'lbs' ? w * 0.453592 : w;
+        var bmi = wKg / (hM * hM);
+        var category = bmi < 18.5 ? 'Underweight' : bmi < 25 ? 'Normal' : bmi < 30 ? 'Overweight' : 'Obese';
+        var resultName = document.getElementById('pp-result-name-{{ section.id }}');
+        var resultVal = document.getElementById('pp-result-value-{{ section.id }}');
+        var resultCat = document.getElementById('pp-result-category-{{ section.id }}');
+        var resultGoal = document.getElementById('pp-result-goal-{{ section.id }}');
+        if (resultName) resultName.textContent = name || 'there';
+        if (resultVal) resultVal.textContent = 'Your BMI: ' + bmi.toFixed(1);
+        if (resultCat) resultCat.textContent = 'Category: ' + category;
+        if (resultGoal) resultGoal.textContent = goal || '—';
+        // Show results after form submits (Shopify redirects, so show immediately)
+        setTimeout(function() {
+          calcResults.hidden = false;
+          calcResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 300);
+      }
+    });
+  }
+
+  // ── Menu VEG / NON-VEG tab filter ────────────────────────────────────────
+  var menuTabs = document.querySelectorAll('.pp-lp__menu-tab');
+  var menuCards = document.querySelectorAll('#pp-menu-grid-{{ section.id }} .pp-lp__meal-card');
+  menuTabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      menuTabs.forEach(function(t) {
+        t.classList.remove('pp-lp__menu-tab--active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      tab.classList.add('pp-lp__menu-tab--active');
+      tab.setAttribute('aria-selected', 'true');
+      var filter = tab.getAttribute('data-filter');
+      menuCards.forEach(function(card) {
+        card.style.display = (card.getAttribute('data-diet') === filter || filter === 'all') ? '' : 'none';
+      });
+    });
+  });
+  // Show only veg by default
+  menuCards.forEach(function(card) {
+    if (card.getAttribute('data-diet') !== 'veg') card.style.display = 'none';
+  });
+
+  // ── Multi-step primary form ───────────────────────────────────────────────
+  var formSteps = document.querySelectorAll('#pp-primary-form-{{ section.id }} .pp-lp__form-step');
+  var stepDots = document.querySelectorAll('#pp-form-{{ section.id }} .pp-lp__step-dot');
+  var progressBar = document.querySelector('#pp-form-{{ section.id }} .pp-lp__step-indicator');
+  var stickyCTA = document.getElementById('pp-sticky-cta-{{ section.id }}');
+  var stickyBtn = document.getElementById('pp-sticky-btn-{{ section.id }}');
+
+  function showStep(n) {
+    formSteps.forEach(function(s, i) {
+      s.hidden = (i + 1) !== n;
+    });
+    stepDots.forEach(function(dot, i) {
+      dot.classList.toggle('pp-lp__step-dot--active', i + 1 <= n);
+      dot.classList.toggle('pp-lp__step-dot--done', i + 1 < n);
+    });
+    if (progressBar) progressBar.setAttribute('aria-valuenow', n);
+    // Update sticky CTA text
+    if (stickyBtn) {
+      if (n === 1) stickyBtn.textContent = '{{ st.hero_cta_primary | default: "Get My Plan" }}';
+      else if (n < 3) stickyBtn.textContent = 'Continue';
+      else stickyBtn.textContent = '{{ st.form_submit_label | default: "Get My Plan & Pricing" }}';
+    }
+  }
+
+  document.querySelectorAll('#pp-primary-form-{{ section.id }} .pp-lp__next-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var currentStep = parseInt(btn.closest('.pp-lp__form-step').getAttribute('data-step'));
+      var currentFields = btn.closest('.pp-lp__form-step').querySelectorAll('[required]');
+      var valid = true;
+      currentFields.forEach(function(field) {
+        if (!field.value) { field.focus(); valid = false; }
+      });
+      if (!valid) return;
+      showStep(currentStep + 1);
+      document.getElementById('pp-form-{{ section.id }}').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  document.querySelectorAll('#pp-primary-form-{{ section.id }} .pp-lp__back-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var backTo = parseInt(btn.getAttribute('data-back'));
+      showStep(backTo);
+    });
+  });
+
+  // ── Sticky mobile CTA: scroll to form ────────────────────────────────────
+  if (stickyCTA && stickyBtn) {
+    stickyBtn.addEventListener('click', function(e) {
+      var formSection = document.getElementById('pp-form-{{ section.id }}');
+      if (formSection) {
+        e.preventDefault();
+        formSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+    // Hide sticky when form is in viewport
+    var formObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        stickyCTA.style.opacity = entry.isIntersecting ? '0' : '1';
+        stickyCTA.style.pointerEvents = entry.isIntersecting ? 'none' : '';
+      });
+    }, { threshold: 0.3 });
+    var formEl = document.getElementById('pp-form-{{ section.id }}');
+    if (formEl) formObserver.observe(formEl);
+  }
+
+  // ── Contact preference → phone required ──────────────────────────────────
+  var contactPrefs = document.querySelectorAll('[name="contact[contact_pref]"]');
+  var phoneField = document.getElementById('pp-form-phone-{{ section.id }}');
+  contactPrefs.forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      if (phoneField) {
+        var needsPhone = radio.value === 'Call me' || radio.value === 'WhatsApp me';
+        phoneField.required = needsPhone;
+      }
+    });
+  });
+
+  // ── Smooth scroll for all lp anchor links ────────────────────────────────
+  document.querySelectorAll('a[href^="#pp-"]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      var target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+})();
+</script>
+
+
+{% schema %}
+{
+  "name": "PP Landing Page",
+  "tag": "div",
+  "class": "pp-landing-page-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "select",
+      "id": "header_style",
+      "label": "Header to display",
+      "info": "Choose 'Minimal' for a focused landing page nav, or 'Theme default' to use the store's main header.",
+      "options": [
+        { "value": "theme", "label": "Theme default header" },
+        { "value": "minimal", "label": "Minimal landing page nav" }
+      ],
+      "default": "minimal"
+    },
+    {
+      "type": "image_picker",
+      "id": "nav_logo",
+      "label": "Minimal nav logo",
+      "info": "Used only when 'Minimal' header is selected."
+    },
+    { "type": "text", "id": "nav_link1_label", "label": "Nav link 1 label", "default": "How It Works" },
+    { "type": "text", "id": "nav_link2_label", "label": "Nav link 2 label", "default": "Plans" },
+    { "type": "text", "id": "nav_link3_label", "label": "Nav link 3 label", "default": "Calculator" },
+    { "type": "text", "id": "nav_cta_label", "label": "Nav CTA button label", "default": "Get Started" },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "label": "Container type",
+      "default": "container",
+      "options": [
+        { "value": "container-fluid", "label": "Default" },
+        { "value": "w-full", "label": "Full width" },
+        { "value": "container", "label": "Boxed" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Section 1 — Hero"
+    },
+    { "type": "text", "id": "hero_eyebrow", "label": "Eyebrow text", "default": "High-protein Indian meals delivered across GTA" },
+    { "type": "text", "id": "hero_h1", "label": "H1 Headline", "default": "Finally, Desi food that fits your macros." },
+    { "type": "textarea", "id": "hero_subhead", "label": "Subheadline", "default": "Subscription meal plans with full macro breakdowns. Veg + non-veg options. No bland chicken-rice life." },
+    { "type": "text", "id": "hero_bullet_1", "label": "Proof bullet 1", "default": "Full macro breakdown per meal" },
+    { "type": "text", "id": "hero_bullet_2", "label": "Proof bullet 2", "default": "Veg & non-veg menus available" },
+    { "type": "text", "id": "hero_bullet_3", "label": "Proof bullet 3 (hidden on mobile)", "default": "Pause, skip, or cancel anytime" },
+    { "type": "text", "id": "hero_bullet_4", "label": "Proof bullet 4 (hidden on mobile)", "default": "GTA-wide delivery" },
+    { "type": "text", "id": "see_more_label", "label": "See more label", "default": "See more" },
+    { "type": "text", "id": "see_less_label", "label": "See less label", "default": "See less" },
+    { "type": "text", "id": "hero_cta_primary", "label": "Primary CTA label", "default": "Get My Plan" },
+    { "type": "text", "id": "hero_cta_secondary", "label": "Secondary CTA label (ghost)", "default": "Try Calculator" },
+    { "type": "text", "id": "hero_delivery_text", "label": "Delivery reassurance line", "default": "Delivering to Toronto, Mississauga, Brampton, Vaughan, Markham & more" },
+    { "type": "image_picker", "id": "hero_bg_image", "label": "Hero background image (optional)" },
+    { "type": "color", "id": "hero_bg_color", "label": "Hero background color", "default": "#f8f5f0" },
+    {
+      "type": "header",
+      "content": "Plan Match Widget (Hero)"
+    },
+    { "type": "text", "id": "widget_header", "label": "Widget heading", "default": "What's your goal?" },
+    { "type": "text", "id": "widget_goal1", "label": "Goal option 1", "default": "Lose Fat" },
+    { "type": "text", "id": "widget_goal2", "label": "Goal option 2", "default": "Build Muscle" },
+    { "type": "text", "id": "widget_goal3", "label": "Goal option 3", "default": "Eat Clean & Consistent" },
+    { "type": "text", "id": "widget_diet_label", "label": "Diet label", "default": "Diet preference:" },
+    { "type": "text", "id": "widget_diet_veg", "label": "Veg option", "default": "Vegetarian" },
+    { "type": "text", "id": "widget_diet_nonveg", "label": "Non-veg option", "default": "Non-Veg" },
+    { "type": "text", "id": "widget_cta", "label": "Widget CTA", "default": "GET MY PLAN →" },
+    { "type": "text", "id": "widget_social_proof", "label": "Social proof line", "default": "120+ people started this month" },
+    {
+      "type": "header",
+      "content": "Section 2 — Trust Stack"
+    },
+    { "type": "color", "id": "trust_bg_color", "label": "Trust stack background", "default": "#ffffff" },
+    { "type": "text", "id": "trust_item_1", "label": "Trust item 1", "default": "Full Macro Breakdown — Every meal shows protein, carbs, fats & calories" },
+    { "type": "image_picker", "id": "trust_icon_1", "label": "Trust item 1 icon (optional)" },
+    { "type": "text", "id": "trust_item_2", "label": "Trust item 2", "default": "Veg + Non-Veg Options — Choose what works for your diet" },
+    { "type": "image_picker", "id": "trust_icon_2", "label": "Trust item 2 icon (optional)" },
+    { "type": "text", "id": "trust_item_3", "label": "Trust item 3", "default": "Flexible Subscriptions — Pause, skip, or cancel anytime. No contracts." },
+    { "type": "image_picker", "id": "trust_icon_3", "label": "Trust item 3 icon (optional)" },
+    { "type": "text", "id": "trust_item_4", "label": "Trust item 4", "default": "GTA Delivery Coverage — Toronto, Mississauga, Brampton, Vaughan, Markham & more" },
+    { "type": "image_picker", "id": "trust_icon_4", "label": "Trust item 4 icon (optional)" },
+    { "type": "text", "id": "trust_item_5", "label": "Trust item 5", "default": "Designed for Results — Plans built for weight loss or muscle gain goals" },
+    { "type": "image_picker", "id": "trust_icon_5", "label": "Trust item 5 icon (optional)" },
+    {
+      "type": "header",
+      "content": "Section 3 — How It Works"
+    },
+    { "type": "color", "id": "hiw_bg_color", "label": "Background color", "default": "#ffffff" },
+    { "type": "text", "id": "hiw_heading", "label": "Heading", "default": "How It Works" },
+    { "type": "text", "id": "hiw_subhead", "label": "Subheading", "default": "3 simple steps to get started" },
+    { "type": "text", "id": "hiw_step1_title", "label": "Step 1 title", "default": "Tell us your goal" },
+    { "type": "textarea", "id": "hiw_step1_desc", "label": "Step 1 description", "default": "Fat loss? Muscle? Just eating clean? We'll match you to the right plan." },
+    { "type": "image_picker", "id": "hiw_step1_icon", "label": "Step 1 icon (optional)" },
+    { "type": "text", "id": "hiw_step2_title", "label": "Step 2 title", "default": "Pick your plan" },
+    { "type": "textarea", "id": "hiw_step2_desc", "label": "Step 2 description", "default": "Choose meals per week, veg or non-veg, and confirm pricing that works for you." },
+    { "type": "image_picker", "id": "hiw_step2_icon", "label": "Step 2 icon (optional)" },
+    { "type": "text", "id": "hiw_step3_title", "label": "Step 3 title", "default": "Get meals delivered" },
+    { "type": "textarea", "id": "hiw_step3_desc", "label": "Step 3 description", "default": "Fresh meals arrive on your schedule. Heat, eat, repeat." },
+    { "type": "image_picker", "id": "hiw_step3_icon", "label": "Step 3 icon (optional)" },
+    { "type": "text", "id": "hiw_cta", "label": "CTA button label", "default": "START YOUR PLAN →" },
+    {
+      "type": "header",
+      "content": "Section 4 — BMI/BMR Calculator"
+    },
+    { "type": "color", "id": "calc_bg_color", "label": "Background color", "default": "#f8f5f0" },
+    { "type": "text", "id": "calc_heading", "label": "Heading", "default": "Know Your Numbers" },
+    { "type": "text", "id": "calc_subhead", "label": "Subheading", "default": "Calculate your BMI or BMR — free, instant report" },
+    { "type": "text", "id": "calc_tab_bmi", "label": "BMI tab label", "default": "BMI Calculator" },
+    { "type": "text", "id": "calc_tab_bmi_sub", "label": "BMI tab sub-label", "default": "(Quick check)" },
+    { "type": "text", "id": "calc_tab_bmr", "label": "BMR tab label", "default": "BMR Calculator" },
+    { "type": "text", "id": "calc_tab_bmr_sub", "label": "BMR tab sub-label", "default": "(Deeper insight)" },
+    { "type": "text", "id": "calc_cta", "label": "Submit button label", "default": "GET MY REPORT →" },
+    { "type": "text", "id": "calc_results_cta", "label": "Results CTA label", "default": "GET MY PLAN & PRICING →" },
+    { "type": "text", "id": "calc_disclaimer", "label": "Disclaimer text", "default": "⚠ Not medical advice. For reference only." },
+    {
+      "type": "header",
+      "content": "Section 5 — Plan Preview / Menu"
+    },
+    { "type": "color", "id": "menu_bg_color", "label": "Background color", "default": "#ffffff" },
+    { "type": "text", "id": "menu_heading", "label": "Heading", "default": "What's on the Menu" },
+    { "type": "text", "id": "menu_subhead", "label": "Subheading", "default": "A peek at this week's high-protein lineup" },
+    { "type": "text", "id": "menu_tab_veg", "label": "Veg tab label", "default": "VEG" },
+    { "type": "text", "id": "menu_tab_nonveg", "label": "Non-veg tab label", "default": "NON-VEG" },
+    { "type": "text", "id": "menu_rotate_note", "label": "Rotating menu note", "default": "Menu rotates weekly. You'll never get bored." },
+    { "type": "text", "id": "menu_cta", "label": "CTA button label", "default": "GET PLAN DETAILS →" },
+    {
+      "type": "header",
+      "content": "Section 6 — Testimonials"
+    },
+    { "type": "color", "id": "testimonials_bg_color", "label": "Background color", "default": "#f8f5f0" },
+    { "type": "text", "id": "testimonials_heading", "label": "Heading", "default": "What Our Subscribers Say" },
+    { "type": "checkbox", "id": "testimonials_show_stars", "label": "Show star ratings", "default": true },
+    { "type": "text", "id": "testimonials_cta", "label": "CTA button label", "default": "JOIN THEM →" },
+    {
+      "type": "header",
+      "content": "Section 7 — Objection Handler"
+    },
+    { "type": "color", "id": "objections_bg_color", "label": "Background color", "default": "#ffffff" },
+    { "type": "text", "id": "objections_heading", "label": "Heading", "default": "Quick Answers" },
+    { "type": "text", "id": "objections_subhead", "label": "Subheading", "default": "Before you ask — we got you" },
+    {
+      "type": "header",
+      "content": "Section 8 — Primary Form"
+    },
+    { "type": "color", "id": "form_bg_color", "label": "Background color", "default": "#f8f5f0" },
+    { "type": "text", "id": "form_heading", "label": "Form section heading", "default": "Ready to Get Started?" },
+    { "type": "text", "id": "form_subhead", "label": "Form section subheading", "default": "Tell us about your goals — we'll handle the rest" },
+    { "type": "text", "id": "form_microcopy", "label": "Intent-filtering microcopy", "default": "This takes 60 seconds. And unlike gym memberships, you'll actually use this." },
+    { "type": "text", "id": "form_submit_label", "label": "Submit button label", "default": "GET MY PLAN & PRICING" },
+    { "type": "text", "id": "form_next_heading", "label": "What happens next heading", "default": "After you submit:" },
+    { "type": "text", "id": "form_next_item_1", "label": "Next step 1", "default": "You'll get a personalized plan recommendation" },
+    { "type": "text", "id": "form_next_item_2", "label": "Next step 2", "default": "We'll send pricing + meal options to your email" },
+    { "type": "text", "id": "form_next_item_3", "label": "Next step 3", "default": "Our team will help you pick the right fit (no pressure)" },
+    { "type": "text", "id": "form_next_item_4", "label": "Next step 4", "default": "If you want, we'll call/WhatsApp within 24 hours" },
+    { "type": "text", "id": "form_response_time", "label": "Response time note", "default": "We respond within 2 hours during business hours." },
+    { "type": "text", "id": "form_no_pressure", "label": "No-pressure line", "default": "No pressure. We're here to help you pick, not push." },
+    {
+      "type": "header",
+      "content": "Section 9 — Final CTA"
+    },
+    { "type": "color", "id": "final_cta_bg_color", "label": "Background color", "default": "#3c6e71" },
+    { "type": "color", "id": "final_cta_text_color", "label": "Text color", "default": "#ffffff" },
+    { "type": "text", "id": "final_cta_heading", "label": "Heading", "default": "Ready to Eat Better?" },
+    { "type": "textarea", "id": "final_cta_subhead", "label": "Subheading", "default": "High-protein Desi meals delivered to your door. No cooking. No counting. Just results." },
+    { "type": "text", "id": "final_cta_btn", "label": "Button label", "default": "GET STARTED →" },
+    { "type": "text", "id": "final_cta_zones", "label": "Delivery zones line", "default": "Delivering to Toronto, Mississauga, Brampton, Vaughan, Markham & more" },
+    { "type": "text", "id": "final_cta_out_of_zone", "label": "Out-of-zone message", "default": "Not in our zone yet?" },
+    { "type": "url", "id": "final_cta_waitlist_link", "label": "Waitlist page link" },
+    {
+      "type": "header",
+      "content": "Animations"
+    },
+    {
+      "type": "select",
+      "id": "animations",
+      "label": "Scroll animation",
+      "default": "inherit",
+      "options": [
+        { "value": "inherit", "label": "Inherit global setting" },
+        { "value": "fade-in", "label": "Fade in" },
+        { "value": "fade-in-up", "label": "Fade in up" },
+        { "value": "fade-in-left", "label": "Fade in left" },
+        { "value": "fade-in-right", "label": "Fade in right" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Hero padding top",
+      "default": 80,
+      "min": 0,
+      "max": 150,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Hero padding bottom",
+      "default": 80,
+      "min": 0,
+      "max": 150,
+      "step": 2,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "meal_card",
+      "name": "Meal Card",
+      "settings": [
+        { "type": "image_picker", "id": "meal_image", "label": "Meal photo" },
+        { "type": "text", "id": "meal_name", "label": "Meal name", "default": "Paneer Tikka Bowl" },
+        {
+          "type": "select",
+          "id": "diet_type",
+          "label": "Diet type",
+          "default": "veg",
+          "options": [
+            { "value": "veg", "label": "Veg" },
+            { "value": "non-veg", "label": "Non-Veg" }
+          ]
+        },
+        { "type": "number", "id": "protein", "label": "Protein (g)", "default": 35 },
+        { "type": "number", "id": "carbs", "label": "Carbs (g)", "default": 45 },
+        { "type": "number", "id": "fat", "label": "Fat (g)", "default": 18 },
+        { "type": "number", "id": "calories", "label": "Calories", "default": 480 }
+      ]
+    },
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Quote",
+          "default": "<p>\"[Add your real customer quote here.]\"</p>"
+        },
+        {
+          "type": "richtext",
+          "id": "footer",
+          "label": "Name (e.g. Priya S.)",
+          "default": "<p>[Customer Name]</p>"
+        },
+        {
+          "type": "richtext",
+          "id": "image_text",
+          "label": "Context (e.g. Mississauga, Fat Loss Plan)",
+          "default": "<p>[City, Goal Plan]</p>"
+        },
+        { "type": "image_picker", "id": "image", "label": "Customer photo (optional)" }
+      ]
+    },
+    {
+      "type": "objection",
+      "name": "Objection Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Will it actually taste Desi?"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Answer",
+          "default": "100%. We're not doing fusion for the sake of it. These are proper Indian flavors — just macro-optimized."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Landing Page",
+      "category": "Landing Pages",
+      "blocks": [
+        {
+          "type": "meal_card",
+          "settings": { "meal_name": "Paneer Tikka Bowl", "diet_type": "veg", "protein": 35, "carbs": 45, "fat": 18, "calories": 480 }
+        },
+        {
+          "type": "meal_card",
+          "settings": { "meal_name": "Chicken Biryani", "diet_type": "non-veg", "protein": 42, "carbs": 52, "fat": 15, "calories": 510 }
+        },
+        {
+          "type": "meal_card",
+          "settings": { "meal_name": "Dal Tadka + Quinoa", "diet_type": "veg", "protein": 28, "carbs": 40, "fat": 12, "calories": 380 }
+        },
+        {
+          "type": "meal_card",
+          "settings": { "meal_name": "Keema Paratha", "diet_type": "non-veg", "protein": 38, "carbs": 35, "fat": 20, "calories": 470 }
+        },
+        {
+          "type": "testimonial",
+          "settings": {}
+        },
+        {
+          "type": "testimonial",
+          "settings": {}
+        },
+        {
+          "type": "testimonial",
+          "settings": {}
+        },
+        {
+          "type": "objection",
+          "settings": { "question": "Will it actually taste Desi?", "answer": "100%. We're not doing fusion for the sake of it. These are proper Indian flavors — just macro-optimized." }
+        },
+        {
+          "type": "objection",
+          "settings": { "question": "What if I'm vegetarian?", "answer": "Full veg menu available. Paneer, dal, chole, the works. Same macro focus, same taste standards." }
+        },
+        {
+          "type": "objection",
+          "settings": { "question": "Do you deliver to my area?", "answer": "We cover the GTA: Toronto, Mississauga, Brampton, Vaughan, Markham, and surrounding areas." }
+        },
+        {
+          "type": "objection",
+          "settings": { "question": "Can I pause or skip weeks?", "answer": "Yep. Pause, skip, or cancel anytime from your dashboard. No contracts, no hassle." }
+        },
+        {
+          "type": "objection",
+          "settings": { "question": "Will I actually see results?", "answer": "Results depend on consistency. We give you the meals. You bring the commitment. Together, that's how progress happens." }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

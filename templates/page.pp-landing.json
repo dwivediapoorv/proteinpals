@@ -10,11 +10,136 @@
 {
   "sections": {
     "main": {
-      "type": "page",
+      "type": "pp-landing-page",
+      "blocks": {
+        "meal_veg_1": {
+          "type": "meal_card",
+          "settings": {
+            "meal_name": "Paneer Tikka Bowl",
+            "diet_type": "veg",
+            "protein": 35,
+            "carbs": 45,
+            "fat": 18,
+            "calories": 480
+          }
+        },
+        "meal_nonveg_1": {
+          "type": "meal_card",
+          "settings": {
+            "meal_name": "Chicken Biryani",
+            "diet_type": "non-veg",
+            "protein": 42,
+            "carbs": 52,
+            "fat": 15,
+            "calories": 510
+          }
+        },
+        "meal_veg_2": {
+          "type": "meal_card",
+          "settings": {
+            "meal_name": "Dal Tadka + Quinoa",
+            "diet_type": "veg",
+            "protein": 28,
+            "carbs": 40,
+            "fat": 12,
+            "calories": 380
+          }
+        },
+        "meal_nonveg_2": {
+          "type": "meal_card",
+          "settings": {
+            "meal_name": "Keema Paratha",
+            "diet_type": "non-veg",
+            "protein": 38,
+            "carbs": 35,
+            "fat": 20,
+            "calories": 470
+          }
+        },
+        "testimonial_1": {
+          "type": "testimonial",
+          "settings": {
+            "description": "<p>\"[Add your real customer quote here — keep it to 2–3 sentences for best impact.]\"</p>",
+            "footer": "<p>[Customer Name]</p>",
+            "image_text": "<p>[City, Goal Plan]</p>"
+          }
+        },
+        "testimonial_2": {
+          "type": "testimonial",
+          "settings": {
+            "description": "<p>\"[Add your real customer quote here — keep it to 2–3 sentences for best impact.]\"</p>",
+            "footer": "<p>[Customer Name]</p>",
+            "image_text": "<p>[City, Goal Plan]</p>"
+          }
+        },
+        "testimonial_3": {
+          "type": "testimonial",
+          "settings": {
+            "description": "<p>\"[Add your real customer quote here — keep it to 2–3 sentences for best impact.]\"</p>",
+            "footer": "<p>[Customer Name]</p>",
+            "image_text": "<p>[City, Goal Plan]</p>"
+          }
+        },
+        "objection_1": {
+          "type": "objection",
+          "settings": {
+            "question": "Will it actually taste Desi?",
+            "answer": "100%. We're not doing fusion for the sake of it. These are proper Indian flavors — just macro-optimized."
+          }
+        },
+        "objection_2": {
+          "type": "objection",
+          "settings": {
+            "question": "What if I'm vegetarian?",
+            "answer": "Full veg menu available. Paneer, dal, chole, the works. Same macro focus, same taste standards."
+          }
+        },
+        "objection_3": {
+          "type": "objection",
+          "settings": {
+            "question": "Do you deliver to my area?",
+            "answer": "We cover the GTA: Toronto, Mississauga, Brampton, Vaughan, Markham, and surrounding areas."
+          }
+        },
+        "objection_4": {
+          "type": "objection",
+          "settings": {
+            "question": "Can I pause or skip weeks?",
+            "answer": "Yep. Pause, skip, or cancel anytime from your dashboard. No contracts, no hassle."
+          }
+        },
+        "objection_5": {
+          "type": "objection",
+          "settings": {
+            "question": "Will I actually see results?",
+            "answer": "Results depend on consistency. We give you the meals. You bring the commitment. Together, that's how progress happens."
+          }
+        },
+        "objection_6": {
+          "type": "objection",
+          "settings": {
+            "question": "Is the calculator accurate?",
+            "answer": "Our BMI/BMR tools give you a reference point, not a medical diagnosis. For personalized advice, consult a professional."
+          }
+        }
+      },
+      "block_order": [
+        "meal_veg_1",
+        "meal_nonveg_1",
+        "meal_veg_2",
+        "meal_nonveg_2",
+        "testimonial_1",
+        "testimonial_2",
+        "testimonial_3",
+        "objection_1",
+        "objection_2",
+        "objection_3",
+        "objection_4",
+        "objection_5",
+        "objection_6"
+      ],
       "settings": {}
     }
   },
-  "order": [
-    "main"
-  ]
+  "order": ["main"]
 }
