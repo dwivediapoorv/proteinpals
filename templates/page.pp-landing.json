@@ -20,7 +20,8 @@
             "protein": 35,
             "carbs": 45,
             "fat": 18,
-            "calories": 480
+            "calories": 480,
+            "product_link": ""
           }
         },
         "meal_nonveg_1": {
@@ -31,7 +32,8 @@
             "protein": 42,
             "carbs": 52,
             "fat": 15,
-            "calories": 510
+            "calories": 510,
+            "product_link": ""
           }
         },
         "meal_veg_2": {
@@ -42,7 +44,8 @@
             "protein": 28,
             "carbs": 40,
             "fat": 12,
-            "calories": 380
+            "calories": 380,
+            "product_link": ""
           }
         },
         "meal_nonveg_2": {
@@ -53,7 +56,8 @@
             "protein": 38,
             "carbs": 35,
             "fat": 20,
-            "calories": 470
+            "calories": 470,
+            "product_link": ""
           }
         },
         "testimonial_1": {
@@ -157,6 +161,7 @@
         "hero_cta_primary": "Get My Plan",
         "hero_cta_secondary": "Try Calculator",
         "hero_delivery_text": "Delivering to Toronto, Mississauga, Brampton, Vaughan, Markham & more",
+        "hero_bg_image": "shopify://shop_images/bj100150-5.jpg",
         "hero_bg_color": "#f8f5f0",
         "widget_header": "What's your goal?",
         "widget_goal1": "Lose Fat",
