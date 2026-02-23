@@ -161,7 +161,6 @@
         "hero_cta_primary": "Get My Plan",
         "hero_cta_secondary": "Try Calculator",
         "hero_delivery_text": "Delivering to Toronto, Mississauga, Brampton, Vaughan, Markham & more",
-        "hero_bg_image": "shopify://shop_images/bj100150-5.jpg",
         "hero_bg_color": "#f8f5f0",
         "widget_header": "What's your goal?",
         "widget_goal1": "Lose Fat",
@@ -236,9 +235,72 @@
         "padding_top": 80,
         "padding_bottom": 80
       }
+    },
+    "custom_content_eVGc39": {
+      "type": "custom-content",
+      "blocks": {
+        "text_RnAAhk": {
+          "type": "text",
+          "settings": {
+            "title": "Ready To Eat Better",
+            "subheading": "",
+            "text": "<p>High-protein Desi meals delivered to your door. No cooking. No counting. Just results.<br/><br/></p>",
+            "width": "100%",
+            "alignment": "center",
+            "align_text": "center",
+            "text_size": "medium",
+            "text_color": "black",
+            "button_label": "Get Started",
+            "button_link": "",
+            "button_style": "sf__btn-primary",
+            "button_size": "",
+            "block_custom_class": "",
+            "animations": "inherit"
+          }
+        },
+        "text_yyK4bM": {
+          "type": "text",
+          "settings": {
+            "title": "",
+            "subheading": "",
+            "text": "<p>Delivering to Toronto, Mississauga, Brampton, Vaughan, Markham & more</p><p>Not in our zone yet?</p>",
+            "width": "100%",
+            "alignment": "center",
+            "align_text": "center",
+            "text_size": "medium",
+            "text_color": "black",
+            "button_label": "",
+            "button_link": "",
+            "button_style": "sf__btn-primary",
+            "button_size": "",
+            "block_custom_class": "",
+            "animations": "inherit"
+          }
+        }
+      },
+      "block_order": [
+        "text_RnAAhk",
+        "text_yyK4bM"
+      ],
+      "name": "Custom content",
+      "settings": {
+        "heading": "",
+        "subheading": "",
+        "description": "",
+        "header_alignment": "center",
+        "container": "container-fluid",
+        "background_color": "",
+        "gap": 30,
+        "use_scroll_mobile": false,
+        "gap_mobile": 16,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "custom_class": ""
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "custom_content_eVGc39"
   ]
 }
