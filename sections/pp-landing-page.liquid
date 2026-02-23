@@ -10,6 +10,9 @@
       assign animation_effect = st.animations
     endif
   endif
+  if st.header_style == 'minimal'
+    assign hide_theme_header = true
+  endif
 -%}
 
 {%- comment -%} ============================================================
@@ -420,7 +423,8 @@
       {% if meal_blocks.size > 0 %}
         {% for block in meal_blocks %}
           {%- assign bs = block.settings -%}
-          <div class="pp-lp__meal-card" data-diet="{{ bs.diet_type }}" {{ block.shopify_attributes }}>
+          <div class="pp-lp__meal-card{% if bs.product_link != blank %} pp-lp__meal-card--linked{% endif %}" data-diet="{{ bs.diet_type }}" {{ block.shopify_attributes }}>
+            {% if bs.product_link != blank %}<a href="{{ bs.product_link }}" class="pp-lp__meal-card-link" aria-label="{{ bs.meal_name }}">{% endif %}
             <div class="pp-lp__meal-img-wrap">
               {% if bs.meal_image != blank %}
                 <img src="{{ bs.meal_image | image_url: width: 400 }}" alt="{{ bs.meal_name }}" width="300" height="240" loading="lazy" class="pp-lp__meal-img">
@@ -438,6 +442,7 @@
                 <span class="pp-lp__macro pp-lp__macro--cal">{{ bs.calories }} cal</span>
               </div>
             </div>
+            {% if bs.product_link != blank %}</a>{% endif %}
           </div>
         {% endfor %}
       {% else %}
@@ -1307,7 +1312,8 @@
         { "type": "number", "id": "protein", "label": "Protein (g)", "default": 35 },
         { "type": "number", "id": "carbs", "label": "Carbs (g)", "default": 45 },
         { "type": "number", "id": "fat", "label": "Fat (g)", "default": 18 },
-        { "type": "number", "id": "calories", "label": "Calories", "default": 480 }
+        { "type": "number", "id": "calories", "label": "Calories", "default": 480 },
+        { "type": "url", "id": "product_link", "label": "Product link (optional)" }
       ]
     },
     {
