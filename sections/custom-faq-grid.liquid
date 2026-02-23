@@ -1,0 +1,184 @@
+<section class="custom-faq-grid">
+  <div class="custom-faq-grid__container">
+
+    <div class="custom-faq-grid__header">
+      <h2>{{ section.settings.heading }}</h2>
+      <p>
+        {{ section.settings.subtext }}
+        <a href="mailto:{{ section.settings.email }}">{{ section.settings.link_text }}</a>
+      </p>
+    </div>
+
+    <div class="custom-faq-grid__items">
+      {% for block in section.blocks %}
+        <details class="faq-card" {{ block.shopify_attributes }}>
+          <summary>
+            <span>{{ block.settings.question }}</span>
+            <svg width="18" height="18" viewBox="0 0 24 24">
+              <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </summary>
+          <div class="faq-card__content">
+            {{ block.settings.answer }}
+          </div>
+        </details>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+<style>
+.custom-faq-grid {
+  padding: 40px 20px;
+  background: #ffffff;
+}
+
+.custom-faq-grid__container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.custom-faq-grid__header h2 {
+  font-size: 40px;
+  margin-bottom: 16px;
+  color: #000000;
+}
+
+.custom-faq-grid__header p {
+  font-size: 17px;
+  color: #000000;
+  max-width: 700px;
+}
+
+.custom-faq-grid__header a {
+  color: #3C6E71;
+  text-decoration: none;
+}
+
+.custom-faq-grid__items {
+  margin-top: 48px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.faq-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 20px 22px;
+  background: #fff;
+}
+
+.faq-card summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.faq-card summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-card summary svg {
+  transition: transform 0.3s ease;
+}
+
+.faq-card[open] summary svg {
+  transform: rotate(180deg);
+}
+
+.faq-card__content {
+  margin-top: 14px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #3C6E71;
+}
+
+
+@media (max-width: 1024px) {
+  .custom-faq-grid__items {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .custom-faq-grid__header h2 {
+    font-size: 30px;
+  }
+
+  .custom-faq-grid__items {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Custom FAQ Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently asked questions"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "Sub text",
+      "default": "Have a different question and can’t find the answer you’re looking for? Reach out to our support team by"
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "Link text",
+      "default": "sending us an email"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Support Email",
+      "default": "support@proteinpals.ca"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "How Does The Nutrition Box Work?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Your meals are freshly prepared, nutritionally balanced, and delivered as per your selected plan.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ Grid",
+      "blocks": [
+        { "type": "faq" },
+        { "type": "faq" },
+        { "type": "faq" },
+        { "type": "faq" },
+        { "type": "faq" },
+        { "type": "faq" }
+      ]
+    }
+  ]
+}
+{% endschema %}

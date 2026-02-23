@@ -1,0 +1,154 @@
+{{ 'meal-plan.css' | asset_url | stylesheet_tag }}
+
+<section class="meal-plans">
+  <div class="container">
+
+    <div class="plans-header">
+      <h2>{{ section.settings.heading }}</h2>
+      <p>{{ section.settings.subheading }}</p>
+    </div>
+ 
+    <div class="plans-toggles">
+      <div class="toggle-group">
+        <button class="active" data-frequency="weekly">Weekly</button>
+        <button data-frequency="monthly">Monthly</button>
+      </div>
+      <div class="toggle-group">
+        <button class="active" data-type="veg">Vegetarian</button>
+        <button data-type="nonveg">Non-Vegetarian</button>
+      </div>
+    </div>
+
+    <div class="plans-grid">
+      {% assign plans = collections['meal-plans'].products %}
+
+      {% for plan in plans %}
+        {% render 'meal-plan-card',
+          title: plan.title,
+          badge: plan.metafields.custom.plan_badge,
+          description: plan.metafields.custom.short_description_for_the_plan_card,
+          weekly_price: plan.metafields.custom.weekly_price_veg,  <!-- adjust below via JS for type -->
+          monthly_price: plan.metafields.custom.monthly_price_veg, <!-- adjust below via JS for type -->
+          type: plan.metafields.custom.type,
+          protein: plan.metafields.custom.protein_info,
+          calories: plan.metafields.custom.calories_info,
+          meals: plan.metafields.custom.number_of_meals_delivered,
+          benefits: plan.metafields.custom.each_benefit | split: "\n",
+          menu: plan.metafields.custom.menu,
+          disclaimer: plan.metafields.custom.disclaimer,
+          do_you_have_any_allergies: plan.metafields.custom.do_you_have_any_allergies,
+          delivery_time: plan.metafields.custom.delivery_time,
+          sub_BLD_calories: plan.metafields.custom.calories_for_bld_sub_plan,
+          sub_BLD_protein: plan.metafields.custom.protein_for_bld_sub_plan,
+          sub_BD_calories: plan.metafields.custom.calories_for_bd_sub_plan,
+          sub_BD_protein: plan.metafields.custom.protein_for_bd_sub_plan,
+          sub_LD_calories: plan.metafields.custom.calories_for_ld_sub_plan,
+          sub_LD_protein: plan.metafields.custom.protein_for_ld_sub_plan,
+          link: plan.url,
+          image: plan.featured_image
+        %}
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+<!-- JS -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+  
+  document.querySelectorAll('.accordion-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const content = this.nextElementSibling;
+      content.style.display = content.style.display === 'block' ? 'none' : 'block';
+    });
+  });
+
+  const priceToggles = document.querySelectorAll('.plans-toggles .toggle-group:first-child button');
+  priceToggles.forEach(btn => {
+    btn.addEventListener('click', function(){
+      priceToggles.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      const frequency = this.getAttribute('data-frequency');
+
+      document.querySelectorAll('.plan-card').forEach(card => {
+        let price = frequency === 'weekly' ? card.dataset.weekly : card.dataset.monthly;
+        card.querySelector('.plan-price .price-amount').textContent = price;
+        card.querySelector('.plan-price .price-duration').textContent = frequency === 'weekly' ? '/week' : '/month';
+      });
+    });
+  });
+
+  
+  const typeToggles = document.querySelectorAll('.plans-toggles .toggle-group:last-child button');
+  typeToggles.forEach(btn => {
+    btn.addEventListener('click', function(){
+      typeToggles.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+
+      const type = this.getAttribute('data-type');
+      document.querySelectorAll('.plan-card').forEach(card => {
+        if(type === 'all' || card.dataset.type === type){
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+
+        
+        const weekly = type === 'veg' ? card.dataset.weeklyVeg : card.dataset.weeklyNonveg;
+        const monthly = type === 'veg' ? card.dataset.monthlyVeg : card.dataset.monthlyNonveg;
+        card.dataset.weekly = weekly;
+        card.dataset.monthly = monthly;
+
+        
+        const frequency = document.querySelector('.plans-toggles .toggle-group:first-child .active').getAttribute('data-frequency');
+        const price = frequency === 'weekly' ? weekly : monthly;
+        card.querySelector('.plan-price .price-amount').textContent = price;
+      });
+    });
+  });
+
+  
+  document.querySelectorAll('.plan-card').forEach(card => {
+    card.querySelectorAll('.subplan-btn')?.forEach(btn => {
+      btn.addEventListener('click', function(){
+
+        card.querySelectorAll('.subplan-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+
+        
+        card.querySelector('.protein').textContent = this.dataset.protein;
+        card.querySelector('.calories').textContent = this.dataset.calories;
+      });
+    });
+  });
+
+});
+</script>
+
+{% schema %}
+{
+  "name": "Meal Plans Selector",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section heading",
+      "default": "Choose Your Meal Plan"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Section subheading",
+      "default": "Nutrition plans designed for every goal and lifestyle"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Meal Plans ",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,59 @@
+{{ 'meal-plan.css' | asset_url | stylesheet_tag }}
+
+
+<div class="plan-card"
+     data-type="{{ type }}"
+     data-weekly-veg="{{ weekly_price }}"
+     data-weekly-nonveg="{{ plan.metafields.custom.weekly_price_nonveg }}"
+     data-monthly-veg="{{ monthly_price }}"
+     data-monthly-nonveg="{{ plan.metafields.custom.monthly_price_nonveg }}">
+
+  <span class="plan-badge">{{ badge }}</span>
+
+  <h3>{{ title }}</h3>
+  <p class="plan-desc">{{ description }}</p>
+
+  {% if title contains "Shred Smart" %}
+  <div class="subplan-buttons">
+    <button class="subplan-btn active" data-sub="BLD" 
+            data-protein="{{ sub_BLD_protein }}" 
+            data-calories="{{ sub_BLD_calories }}">BLD</button>
+    <button class="subplan-btn" data-sub="BD" 
+            data-protein="{{ sub_BD_protein }}" 
+            data-calories="{{ sub_BD_calories }}">BD</button>
+    <button class="subplan-btn" data-sub="LD" 
+            data-protein="{{ sub_LD_protein }}" 
+            data-calories="{{ sub_LD_calories }}">LD</button>
+  </div>
+  {% endif %}
+
+  <div class="plan-details">
+    <p><strong>Protein:</strong> <span class="protein">{{ protein }}</span></p>
+    <p><strong>Calories:</strong> <span class="calories">{{ calories }}</span></p>
+    <p><strong>Meals:</strong> {{ meals }}</p>
+  </div>
+
+  <div class="plan-price">
+    <span class="price-amount">{{ weekly_price }}</span>
+    <span class="price-duration">/week</span>
+  </div>
+
+  <ul class="plan-features">
+    {% for item in benefits %}
+      <li>{{ item }}</li>
+    {% endfor %}
+  </ul>
+
+  <button class="accordion-btn">See Menu</button>
+  <div class="accordion-content">{{ menu }}</div>
+
+  <button class="accordion-btn">Disclaimer</button>
+  <div class="accordion-content">
+    {{ disclaimer }}
+    <p>{{ do_you_have_any_allergies }}</p>
+    <p><strong>Order Cut-Off:</strong> Orders placed before 7 PM start delivery from the next day.</p>
+    <p>{{ delivery_time }}</p>
+  </div>
+
+  <a href="{{ link }}" class="btn-primary">Select Plan</a>
+</div>

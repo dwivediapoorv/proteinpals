@@ -1,0 +1,195 @@
+/* Meal Plans Section */
+.meal-plans {
+  padding: 60px 0;
+  font-family: 'Helvetica Neue', sans-serif;
+  background-color: #fafafa;
+}
+
+.meal-plans .plans-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.meal-plans .plans-header h2 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.meal-plans .plans-header p {
+  font-size: 16px;
+  color: #555;
+}
+
+
+.plans-toggles {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.plans-toggles .toggle-group button {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.plans-toggles .toggle-group button.active {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.plan-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s;
+}
+
+.plan-card:hover {
+  transform: translateY(-5px);
+}
+
+.plan-card .plan-badge {
+  display: inline-block;
+  background: #3c6e71;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 50px;
+  margin-bottom: 10px;
+}
+
+.plan-card h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.plan-card .plan-desc {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.plan-card .plan-details p {
+  font-size: 14px;
+  margin: 3px 0;
+}
+
+.plan-card .plan-price {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 15px 0;
+}
+
+.plan-card .plan-price .price-duration {
+  font-size: 14px;
+  font-weight: normal;
+  color: #777;
+  margin-left: 5px;
+}
+
+.plan-card .plan-features {
+  list-style: disc;
+  padding-left: 20px;
+  margin-bottom: 15px;
+  color: #555;
+  font-size: 14px;
+}
+
+.plan-card .accordion-btn {
+  background: #f4f4f4;
+  border: none;
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  transition: background 0.3s;
+}
+
+.plan-card .accordion-btn:hover {
+  background: #e0e0e0;
+}
+
+.plan-card .accordion-content {
+  display: none;
+  font-size: 14px;
+  color: #555;
+  padding: 10px 0 10px 10px;
+  border-left: 3px solid #3c6e71;
+  margin-bottom: 10px;
+}
+
+.plan-card .btn-primary {
+  background: #000;
+  color: #fff;
+  text-align: center;
+  padding: 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.plan-card .btn-primary:hover {
+  background: #3c6e71;
+}
+
+
+.allergy-box, .cutoff-box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 40px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.allergy-box h4, .cutoff-box strong {
+  margin-bottom: 10px;
+}
+
+
+@media(max-width:768px){
+  .plans-toggles {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+
+.subplan-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+.subplan-btn {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.subplan-btn.active {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+ 
