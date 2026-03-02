@@ -12,6 +12,30 @@
     "main": {
       "type": "pp-landing-page",
       "blocks": {
+        "meal_card_jARqkR": {
+          "type": "meal_card",
+          "settings": {
+            "meal_name": "Sidharth",
+            "diet_type": "non-veg",
+            "protein": 70,
+            "carbs": 45,
+            "fat": 18,
+            "calories": 480,
+            "product_link": ""
+          }
+        },
+        "meal_card_caacXw": {
+          "type": "meal_card",
+          "settings": {
+            "meal_name": "apoorv",
+            "diet_type": "veg",
+            "protein": 35,
+            "carbs": 45,
+            "fat": 18,
+            "calories": 480,
+            "product_link": ""
+          }
+        },
         "meal_veg_1": {
           "type": "meal_card",
           "settings": {
@@ -128,6 +152,8 @@
         }
       },
       "block_order": [
+        "meal_card_jARqkR",
+        "meal_card_caacXw",
         "meal_veg_1",
         "meal_nonveg_1",
         "meal_veg_2",
