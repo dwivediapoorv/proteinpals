@@ -23,30 +23,7 @@
       {% assign plans = collections['meal-plans'].products %}
 
       {% for plan in plans %}
-        {% render 'meal-plan-card',
-          title: plan.title,
-          badge: plan.metafields.custom.plan_badge,
-          description: plan.metafields.custom.short_description_for_the_plan_card,
-          weekly_price: plan.metafields.custom.weekly_price_veg,  <!-- adjust below via JS for type -->
-          monthly_price: plan.metafields.custom.monthly_price_veg, <!-- adjust below via JS for type -->
-          type: plan.metafields.custom.type,
-          protein: plan.metafields.custom.protein_info,
-          calories: plan.metafields.custom.calories_info,
-          meals: plan.metafields.custom.number_of_meals_delivered,
-          benefits: plan.metafields.custom.each_benefit | split: "\n",
-          menu: plan.metafields.custom.menu,
-          disclaimer: plan.metafields.custom.disclaimer,
-          do_you_have_any_allergies: plan.metafields.custom.do_you_have_any_allergies,
-          delivery_time: plan.metafields.custom.delivery_time,
-          sub_BLD_calories: plan.metafields.custom.calories_for_bld_sub_plan,
-          sub_BLD_protein: plan.metafields.custom.protein_for_bld_sub_plan,
-          sub_BD_calories: plan.metafields.custom.calories_for_bd_sub_plan,
-          sub_BD_protein: plan.metafields.custom.protein_for_bd_sub_plan,
-          sub_LD_calories: plan.metafields.custom.calories_for_ld_sub_plan,
-          sub_LD_protein: plan.metafields.custom.protein_for_ld_sub_plan,
-          link: plan.url,
-          image: plan.featured_image
-        %}
+        {% render 'meal-plan-card', title: plan.title, badge: plan.metafields.custom.plan_badge, description: plan.metafields.custom.short_description_for_the_plan_card, weekly_price: plan.metafields.custom.weekly_price_veg, monthly_price: plan.metafields.custom.monthly_price_veg, type: plan.metafields.custom.type, protein: plan.metafields.custom.protein_info, calories: plan.metafields.custom.calories_info, meals: plan.metafields.custom.number_of_meals_delivered, benefits: plan.metafields.custom.each_benefit, split: "\n", menu: plan.metafields.custom.menu, disclaimer: plan.metafields.custom.disclaimer, do_you_have_any_allergies: plan.metafields.custom.do_you_have_any_allergies, delivery_time: plan.metafields.custom.delivery_time, sub_BLD_calories: plan.metafields.custom.calories_for_bld_sub_plan, sub_BLD_protein: plan.metafields.custom.protein_for_bld_sub_plan, sub_BD_calories: plan.metafields.custom.calories_for_bd_sub_plan, sub_BD_protein: plan.metafields.custom.protein_for_bd_sub_plan, sub_LD_calories: plan.metafields.custom.calories_for_ld_sub_plan, sub_LD_protein: plan.metafields.custom.protein_for_ld_sub_plan, link: plan.url, image: plan.featured_image %}
       {% endfor %}
     </div>
 
@@ -152,3 +129,49 @@ document.addEventListener("DOMContentLoaded", function() {
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {% render 'meal-plan-card',
+              title: plan.title,
+              badge: plan.metafields.custom.plan_badge,
+              description: plan.metafields.custom.short_description_for_the_plan_card,
+              weekly_price: plan.metafields.custom.weekly_price_veg,  <!-- adjust below via JS for type -->
+              monthly_price: plan.metafields.custom.monthly_price_veg, <!-- adjust below via JS for type -->
+              type: plan.metafields.custom.type,
+              protein: plan.metafields.custom.protein_info,
+              calories: plan.metafields.custom.calories_info,
+              meals: plan.metafields.custom.number_of_meals_delivered,
+              benefits: plan.metafields.custom.each_benefit | split: "\n",
+              menu: plan.metafields.custom.menu,
+              disclaimer: plan.metafields.custom.disclaimer,
+              do_you_have_any_allergies: plan.metafields.custom.do_you_have_any_allergies,
+              delivery_time: plan.metafields.custom.delivery_time,
+              sub_BLD_calories: plan.metafields.custom.calories_for_bld_sub_plan,
+              sub_BLD_protein: plan.metafields.custom.protein_for_bld_sub_plan,
+              sub_BD_calories: plan.metafields.custom.calories_for_bd_sub_plan,
+              sub_BD_protein: plan.metafields.custom.protein_for_bd_sub_plan,
+              sub_LD_calories: plan.metafields.custom.calories_for_ld_sub_plan,
+              sub_LD_protein: plan.metafields.custom.protein_for_ld_sub_plan,
+              link: plan.url,
+              image: plan.featured_image
+            %}
+  to: '{% render ''meal-plan-card'', title: plan.title, badge: plan.metafields.custom.plan_badge,
+    description: plan.metafields.custom.short_description_for_the_plan_card, weekly_price:
+    plan.metafields.custom.weekly_price_veg, monthly_price: plan.metafields.custom.monthly_price_veg,
+    type: plan.metafields.custom.type, protein: plan.metafields.custom.protein_info,
+    calories: plan.metafields.custom.calories_info, meals: plan.metafields.custom.number_of_meals_delivered,
+    benefits: plan.metafields.custom.each_benefit, split: "\n", menu: plan.metafields.custom.menu,
+    disclaimer: plan.metafields.custom.disclaimer, do_you_have_any_allergies: plan.metafields.custom.do_you_have_any_allergies,
+    delivery_time: plan.metafields.custom.delivery_time, sub_BLD_calories: plan.metafields.custom.calories_for_bld_sub_plan,
+    sub_BLD_protein: plan.metafields.custom.protein_for_bld_sub_plan, sub_BD_calories:
+    plan.metafields.custom.calories_for_bd_sub_plan, sub_BD_protein: plan.metafields.custom.protein_for_bd_sub_plan,
+    sub_LD_calories: plan.metafields.custom.calories_for_ld_sub_plan, sub_LD_protein:
+    plan.metafields.custom.protein_for_ld_sub_plan, link: plan.url, image: plan.featured_image
+    %}'
+  position: 766..1937
+{% endcomment %}
